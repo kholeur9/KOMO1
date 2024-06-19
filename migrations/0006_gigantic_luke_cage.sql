@@ -1,0 +1,1 @@
+ALTER TABLE "forfaits_internet" ALTER COLUMN "id" SET DATA TYPE serial;

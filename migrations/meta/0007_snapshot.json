@@ -1,15 +1,90 @@
 {
-  "id": "f4c6c6d1-e637-45e8-a01e-66bb06e2fb8f",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "a3c4c070-c7dd-4dc9-9efb-5db3d2b8d78c",
+  "prevId": "c3ffe31b-df45-4602-a064-8597cf1f6d67",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.forfaits": {
-      "name": "forfaits",
+    "public.credits": {
+      "name": "credits",
       "schema": "",
       "columns": {
-        "userId": {
-          "name": "userId",
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forfait_id": {
+          "name": "forfait_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "credit": {
+          "name": "credit",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "date": {
+          "name": "date",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "credits_user_id_users_id_fk": {
+          "name": "credits_user_id_users_id_fk",
+          "tableFrom": "credits",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "credits_forfait_id_forfaits_internet_id_fk": {
+          "name": "credits_forfait_id_forfaits_internet_id_fk",
+          "tableFrom": "credits",
+          "tableTo": "forfaits_internet",
+          "columnsFrom": [
+            "forfait_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.forfaits_internet": {
+      "name": "forfaits_internet",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -31,17 +106,17 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "forfaits_userId_users_id_fk": {
-          "name": "forfaits_userId_users_id_fk",
-          "tableFrom": "forfaits",
+        "forfaits_internet_user_id_users_id_fk": {
+          "name": "forfaits_internet_user_id_users_id_fk",
+          "tableFrom": "forfaits_internet",
           "tableTo": "users",
           "columnsFrom": [
-            "userId"
+            "user_id"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
@@ -54,10 +129,9 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
+          "notNull": true
         },
         "numero": {
           "name": "numero",

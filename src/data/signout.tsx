@@ -1,6 +1,5 @@
 import { signOut } from "@/auth";
-import { Button } from "@/components/ui/button";
-import { GoSignOut } from "react-icons/go";
+import { ButtonSignOut } from "@/features/auth/button-sign-out";
 
 export const SignOut = () => {
   return (
@@ -10,9 +9,7 @@ export const SignOut = () => {
 
         await signOut();
       }}>
-        <Button size="icon" type="submit" className="flex gap-1.5 font-800 rounded-full bg-gray-800 w-auto w-[35px] h-[35px]">
-          <GoSignOut size={20} />
-        </Button>
+        <ButtonSignOut />
       </form>
     </div>
   )

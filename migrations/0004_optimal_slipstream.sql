@@ -1,0 +1,1 @@
+ALTER TABLE "forfaits_internet" ADD COLUMN "id" uuid DEFAULT gen_random_uuid() NOT NULL;

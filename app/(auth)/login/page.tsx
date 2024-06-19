@@ -4,8 +4,8 @@ import Image from "next/image";
 export default function LoginPage() {
   return (
     <>
-    <div className="absolute bottom-0 right-6">
-      <p className="text-white text-[9px]">
+    <div className="w-full absolute bottom-0 right-0 left-0">
+      <p className="text-white text-[9px] text-center">
         <a href="#">
           Powered by Prima-Tech
         </a>

@@ -1,0 +1,1 @@
+ALTER TABLE "forfaits" ALTER COLUMN "userId" SET DATA TYPE uuid;

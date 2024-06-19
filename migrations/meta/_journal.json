@@ -5,8 +5,64 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1718247661404,
-      "tag": "0000_dashing_blonde_phantom",
+      "when": 1718597392784,
+      "tag": "0000_fixed_mentallo",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1718597602825,
+      "tag": "0001_tricky_mathemanic",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1718608435940,
+      "tag": "0002_flawless_dorian_gray",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1718609329142,
+      "tag": "0003_bent_avengers",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1718617622243,
+      "tag": "0004_optimal_slipstream",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1718638262673,
+      "tag": "0005_grey_dragon_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1718638533470,
+      "tag": "0006_gigantic_luke_cage",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1718641571618,
+      "tag": "0007_secret_nemesis",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1718754380100,
+      "tag": "0008_powerful_pixie",
       "breakpoints": true
     }
   ]

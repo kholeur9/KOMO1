@@ -12,23 +12,19 @@ export const authConfig = {
         console.log("Auth_Config : ", valideFields);
 
         if (valideFields.success) {
-          const { email, password } = valideFields.data;
+          const { name, password } = valideFields.data;
 
-          const user = await getUser(email);
+          const user = await getUser(name);
 
           if (!user) {
             return null;
           }
 
-          if (user) {
-            const passwordsMatch = await user.password === password;
-            if (passwordsMatch) {
+          const passwordsMatch = user.password === password;
+          
+          if (passwordsMatch) {
               return user;
-            }
-          } else {
-            return null;
           }
-
         }
 
         console.log('Invalid credentials');

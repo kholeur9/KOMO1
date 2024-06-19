@@ -1,16 +1,16 @@
 {
-  "id": "f4c6c6d1-e637-45e8-a01e-66bb06e2fb8f",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "ad2ee24c-6a1c-4508-99d7-34560664d359",
+  "prevId": "6cb4bc3e-820f-409c-9a90-429c96dd4652",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.forfaits": {
-      "name": "forfaits",
+    "public.forfaits_internet": {
+      "name": "forfaits_internet",
       "schema": "",
       "columns": {
-        "userId": {
-          "name": "userId",
-          "type": "integer",
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         },
@@ -30,21 +30,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "forfaits_userId_users_id_fk": {
-          "name": "forfaits_userId_users_id_fk",
-          "tableFrom": "forfaits",
-          "tableTo": "users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },

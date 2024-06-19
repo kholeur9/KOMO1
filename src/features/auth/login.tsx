@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-//import { toast } from "@/components/ui/use-toast"
+import { Loader } from "@/components/ui/loader"
 
 import { FormSchema } from "@/secure/number";
 import { FormError } from "@/features/auth/form-error";
@@ -29,6 +29,8 @@ import { authenticate } from '@/actions/login';
 export const Login = () => {
   const router = useRouter();
 
+  const [ chargePassword, setChargePassword ] = useState('1234');
+  const [showPassword, setShowPassword ] = useState(false);
   const [ success, setSuccess ] = useState<string>("");
   const [ error, setError ] = useState<string>("");
   const [ isPending, startTransition ] = useTransition()
@@ -36,12 +38,14 @@ export const Login = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      name: "",
+      password: "1234",
     },
   })
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    setError("");
+    setSuccess("");
     
     startTransition(() => {
       authenticate(values)
@@ -62,16 +66,17 @@ export const Login = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
             <FormField
               control={form.control}
-              name="email"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-white">Email</FormLabel>
+                  <FormLabel className="text-white">Numéro</FormLabel>
                   <FormControl>
                     <Input 
                       disabled={isPending}
                       placeholder="07*******" 
                       {...field}
                       className="h-[50px] outline-none text-md bg-[#1C2333] border-transparent text-white"
+                      type="text"
                     />
                   </FormControl>
                   <FormMessage />        
@@ -81,28 +86,36 @@ export const Login = () => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white">Mot de passe</FormLabel>
-                  <FormControl>
-                    <Input 
-                      disabled={isPending}
-                      placeholder="********" 
-                      {...field}
-                      className="h-[50px] outline-none text-md bg-[#1C2333] border-transparent text-white"
-                    />
-                  </FormControl>
-                  <FormMessage /> 
-                </FormItem>
-              )}
-            />
+            {showPassword && (
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-white">Mot de passe</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isPending}
+                        placeholder="****"
+                        {...field}
+                        className="h-[50px] outline-none text-md bg-[#1C2333] border-transparent text-white"
+                        type="password"
+                      />
+                    </FormControl>
+                    <FormMessage />       
+                  </FormItem>
+                )}
+              />
+            )}
             <FormError message={error} />
             <FormSuccess message={success} />
             <Button disabled={isPending} type="submit" className="w-full h-[48px] bg-[#0390D0] hover:bg-[#036394]">
-              {isPending ? "Validation en cours..." : "Valider"}
+              {isPending ? 
+              <div className="flex items-center">
+                <Loader className="mr-2 h-6 w-6"/>
+                vérification du numéro
+              </div>
+               : "valider"}
             </Button>
           </form>
         </Form>
