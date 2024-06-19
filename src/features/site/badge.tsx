@@ -7,9 +7,9 @@ import { eq, sum, asc, sql } from "drizzle-orm";
 import { getTotalCredit } from "@/actions/total-credit";
 
 type BadgeCreditsProps = {
-  session: any;
-  item: any;
-  id: any;
+  session?: any | null;
+  item?: any;
+  id?: any;
 }
 
 const getCredit = (user) => {
