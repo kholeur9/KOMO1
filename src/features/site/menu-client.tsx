@@ -1,18 +1,18 @@
 'use client';
 
-import { useToast } from "@/components/ui/use-toast";
-
 import { Menu, SubMenu } from "@/features/site/menu";
-import { ToastDemo } from "@/features/site/unvailable";
 
-export const MenuClient = () => {
-  const { toast } = useToast();
+interface MenuClientProps {
+  session: any;
+}
+
+export const MenuClient = ({ session } : MenuClientProps) => {
 
   return (
     <>
       <Menu
         className="hover:border-orange-500"
-        href={'/'} 
+        href={`/retrait/${session?.user?.id}`}
         description={'Cliquer et convertisser vos crédits en forfaits.'}
         header={'Crédit'}
         >
@@ -20,7 +20,7 @@ export const MenuClient = () => {
       </Menu>
       <Menu
         className="hover:border-blue-500"
-        href={'/'} 
+        href={`/historique/${session?.user?.id}`}
         description={'Cliquer et regarder votre historique de retraits.'}
         header={'Historique'}
         >
@@ -30,12 +30,7 @@ export const MenuClient = () => {
       <div className="w-full grid grid-cols-2 gap-2.5">
         <SubMenu
           className="hover:border-green-300"
-          onClick={() => {
-            toast({
-              title: "Uh oh! Something went wrong.",
-              description: "There was a problem with your request.",
-            })
-          }}
+          href={`/membre/${session?.user?.id}`}
           header={'Membre'}
           description={'Cliquer et devenez membre.'}
           >
@@ -43,14 +38,13 @@ export const MenuClient = () => {
         </SubMenu>
         <SubMenu
           className="hover:border-red-500"
-          onClick={() => alert('Cliquer et regarder votre historique de retraits.')}
+          href={'/aide'}
           header={'Aide'}
           description={'Cliquer et dites nous comment vois aider.'}
           >
           <i className="fi fi-ss-user-headset text-red-500"></i>
         </SubMenu>
       </div>
-     <ToastDemo />
     </>
   )
 }

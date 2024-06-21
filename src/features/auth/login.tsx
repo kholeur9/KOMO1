@@ -16,7 +16,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input"
 import { Loader } from "@/components/ui/loader"
 
@@ -27,9 +27,8 @@ import { FormSuccess } from "@/features/auth/form-success";
 import { authenticate } from '@/actions/login';
 
 export const Login = () => {
-  const router = useRouter();
+  //const router = useRouter();
 
-  const [ chargePassword, setChargePassword ] = useState('1234');
   const [showPassword, setShowPassword ] = useState(false);
   const [ success, setSuccess ] = useState<string>("");
   const [ error, setError ] = useState<string>("");
