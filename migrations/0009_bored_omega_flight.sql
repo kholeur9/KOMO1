@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX IF NOT EXISTS "userId_idx" ON "total_credit" USING btree ("user_id");

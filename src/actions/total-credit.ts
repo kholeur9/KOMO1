@@ -1,5 +1,7 @@
 'use server';
 
+import { revalidatePath } from "next/cache";
+
 import { db } from "@/db";
 import { totalCredit } from "@/db/schema";
 import { credits } from "@/db/schema";
@@ -8,7 +10,7 @@ import { sum, eq, sql } from "drizzle-orm";
 import { getUniqueTotalCredit } from "@/data/user";
 
 export async function getTotalCredit(user: any) {
-  console.log(`Looking for user : ${user.id}`);
+  console.log(`Looking for user : ${user?.id}`);
   try {
     
     const existTotalCredit = await getUniqueTotalCredit(user);

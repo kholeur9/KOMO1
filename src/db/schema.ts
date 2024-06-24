@@ -36,4 +36,17 @@ export const totalCredit = pgTable('total_credit', {
   id: serial('id').primaryKey(),
   userId: integer('user_id').references(() => users.id),
   total_credit: integer('total_credit').notNull().default(0)
+}, (totalCredit) => {
+  return {
+    userCreditIndex: uniqueIndex("userId_idx").on(totalCredit.userId)
+  }
 });
+
+export const retraitCredit = pgTable('retrait_credit', {
+  id: serial('id').primaryKey(),
+  totalCreditId: integer('total_credit_id').references(() => totalCredit.id),
+  quantity: integer('quantity').notNull().default(0),
+  data_forfait: text('data_forfait').notNull(),
+  date: timestamp('date', { withTimezone: true }).notNull().defaultNow(),
+  status: text('status', { enum : ['en attente', 'réussi', 'échec'] }).notNull().default('en attente'),
+})

@@ -1,0 +1,1 @@
+ALTER TABLE "retrait_credit" ADD COLUMN "status" text DEFAULT 'en attente' NOT NULL;
