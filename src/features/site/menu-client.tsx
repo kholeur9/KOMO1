@@ -12,7 +12,7 @@ export const MenuClient = ({ session } : MenuClientProps) => {
     <>
       <Menu
         className="hover:border-orange-500"
-        href={`/retrait/${session?.user?.id}`}
+        href={`/retrait/${session.id}`}
         description={'Cliquer et convertisser vos crédits en forfaits.'}
         header={'Crédit'}
         >
@@ -20,7 +20,7 @@ export const MenuClient = ({ session } : MenuClientProps) => {
       </Menu>
       <Menu
         className="hover:border-blue-500"
-        href={`/historique/${session?.user?.id}`}
+        href={`/historique/${session.id}`}
         description={'Cliquer et regarder votre historique de retraits.'}
         header={'Historique'}
         >
@@ -30,7 +30,7 @@ export const MenuClient = ({ session } : MenuClientProps) => {
       <div className="w-full grid grid-cols-2 gap-2.5">
         <SubMenu
           className="hover:border-green-300"
-          href={`/membre/${session?.user?.id}`}
+          href={`/membre/${session.id}`}
           header={'Membre'}
           description={'Cliquer et devenez membre.'}
           >

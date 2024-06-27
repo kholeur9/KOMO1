@@ -6,19 +6,18 @@ import { LayoutGrid } from 'lucide-react';
 
 import { MenuClient } from "@/features/site/menu-client";
 
-
-import { auth } from "@/auth";
+import { getCurrentUser } from "@/data/current-user";
 
 export default async function Home() {
-  const session = await auth();
+  const session = await getCurrentUser();
 
   return (
     <div className="flex flex-col gap-2.5">
       <Header />
       <section className="flex items-center justify-between px-6">
         <div className="flex flex-col items-center">
-          <span className="text-xs text-gray-500">Numéro {session?.user?.role} : {session?.user?.id}</span>
-          <span className="text-md text-white">{session?.user?.name}</span>
+          <span className="text-xs text-gray-500">Numéro {session.role} : {session.id}</span>
+          <span className="text-md text-white">{session.name}</span>
         </div>
         <BadgeCredits session={session} />
       </section>

@@ -28,7 +28,8 @@ const getCredit = (user) => {
 }
 
 export const BadgeCredits = async ({ session } : BadgeCreditsProps) => {
-  const credits = await getCredit(session?.user);
+  
+  const credits = await getCredit(session);
 
   credits.forEach(async (item) => {
     await getTotalCredit(item);

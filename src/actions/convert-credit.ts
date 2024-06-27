@@ -7,6 +7,7 @@ import { retraitCredit } from "@/db/schema";
 import { totalCredit } from "@/db/schema";
 import { userTotalCredit } from "@/data/user";
 import { getLastWithDraw } from "@/data/user";
+import { sendSms } from "./send-sms";
 
 import { eq, sql, sum } from "drizzle-orm";
 
@@ -23,20 +24,29 @@ export const ConvertCredit = async ( formData : z.infer<typeof convertCreditSche
 
   //Vérifie les informations
   if (!validateFields.success) {
-    return { error : "Refusé"};
+    return { error : "Votre échange a été Refusé"};
   }
 
   // Securise les echanges
   if (total < withdraw){
-    return { error : `Vous avez moins de ${withdraw} crédits pour un échange de ${quantity} Mo`};
+    return { error : `Vous n'avez pas assez de crédits.`};
   };
 
   // Sauvegarder le retrait si tout est bon
   const totalCreditId = await userTotalCredit(ci);
+  console.log(`TotalCreditId`, totalCreditId);
   
   if (!totalCreditId){
     console.log('Non recupéré !!');
     return {error : 'Erreur de récupération des credits.'}
+  }
+
+  const lastWithdraw = await getLastWithDraw(totalCreditId.id);
+
+  console.log(`LastWithdraw`, lastWithdraw.quantity);
+
+  if (lastWithdraw.allowWithdraw) {
+    return { error : 'Vous avez déjà éffectué un retrait dans les 24 heures.'}
   }
 
   let transactionError = null;
@@ -70,6 +80,12 @@ export const ConvertCredit = async ( formData : z.infer<typeof convertCreditSche
       if (!debitCredit){
         throw new Error('Erreur de mise à jour de total credit.');
       }
+
+      const message = `Le client ${numero} a effectue une conversion de ${withdraw} c redits pour un forfait de $iquantity} Mo. Mess age de l'application komo1App.`
+      const send = await sendSms(message);
+      if (!send) {
+        throw new Error('Transaction ::: Erreur lors de l\'envoi du SMS.');
+      }
       
     });
   } catch (error) {
@@ -79,6 +95,10 @@ export const ConvertCredit = async ( formData : z.infer<typeof convertCreditSche
 
   if (transactionError) {
 
+    if (transactionError.message.includes('Transaction ::: Erreur lors de l\'envoi du SMS.')) {
+      return { error : 'Problème interne, réessayer plus tard.'};
+    }
+
     if (retraitCreditId) {
       try {
         await db.update(retraitCredit).set({ status : 'échec' }).where(eq(retraitCredit.id, retraitCreditId))
@@ -86,7 +106,7 @@ export const ConvertCredit = async ( formData : z.infer<typeof convertCreditSche
         console.error('Erreur lors de la mise à jour de la transaction :', updateError);
       }
     }
-    return { error : 'La demande a échoué'}
+    return { error : 'Votre échange a été réjeté.'}
   } else {
     // Si la transaction s'est terminé avec succès, mettre à jour le statut
     if (retraitCreditId){
@@ -98,7 +118,7 @@ export const ConvertCredit = async ( formData : z.infer<typeof convertCreditSche
 
       revalidatePath(`/retrait/${ci}`)
     }
-    return { success : 'Accordé'}
+    return { success : 'Votre échange a été effectué avec succès'}
   }
-  revalidatePath(`/retrait/${ci}`)
+  ///revalidatePath(`/retrait/${ci}`)
 }
