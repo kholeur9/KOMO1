@@ -1,8 +1,11 @@
 import { db } from "@/db";
+
 import { users } from "@/db/schema";
 import { totalCredit } from "@/db/schema";
 import { retraitCredit } from "@/db/schema";
-import { eq, sum, asc, sql, desc } from "drizzle-orm";
+import { forfaits } from "@/db/schema";
+
+import { eq, sum, asc, sql, desc, count, ne } from "drizzle-orm";
 
 import { DateTime } from "luxon";
 
@@ -25,6 +28,29 @@ export const getUserById = async (id : string ) => {
     return user[0];
   } catch (error) {
     throw new Error('Failed to fetch user.');
+  }
+}
+
+export const countAllUsers = async (id: any) => {
+  try {
+    const countUser = await db.select({ value: count() }).from(users).where(ne(users.id, id))
+
+    const counted = countUser.map(user => user.value)
+    return counted;
+  } catch (error) {
+    throw new Error('Failed to fetch user.');
+  }
+}
+
+export const countAllForfaits = async () => {
+  try {
+    const countForfait = await db.select({ value: count() }).from(forfaits)
+
+    const counted = countForfait.map(forfait => forfait.value)
+
+    return counted;
+  } catch (error) {
+    throw new Error('Failed to fetch forfait.');
   }
 }
 
@@ -70,7 +96,7 @@ export const getLastWithDraw = async ( id : any ) => {
       .limit(1);
 
     if (lastWithdraw.length <= 0){
-      throw new Error('No withdraw found');
+      return null;
     }
 
     const result = lastWithdraw.map( item => {
@@ -100,6 +126,7 @@ export const getLastWithDraw = async ( id : any ) => {
         throw new Error('Erreur de formatage de date');
       }
     })
+    
     return result[0]
   } catch (error) {
     console.log(`Erreur lors de la récupération du dernier retrait : `, error);

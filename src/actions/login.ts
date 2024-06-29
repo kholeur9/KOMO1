@@ -6,6 +6,9 @@ import { DEFAULT_LOGIN_REDIRECT } from '../../routes';
 import * as z from 'zod';
 import { FormSchema } from "@/secure/number";
 
+import { useRouter } from "next/navigation";
+
+
 export async function authenticate(
   values: z.infer<typeof FormSchema>
 ) {

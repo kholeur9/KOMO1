@@ -26,10 +26,9 @@ import { FormSuccess } from "@/features/auth/form-success";
 
 import { authenticate } from '@/actions/login';
 
-export const Login = () => {
+export const Login = ( admin: any ) => {
   //const router = useRouter();
 
-  const [showPassword, setShowPassword ] = useState(false);
   const [ success, setSuccess ] = useState<string>("");
   const [ error, setError ] = useState<string>("");
   const [ isPending, startTransition ] = useTransition()
@@ -38,7 +37,7 @@ export const Login = () => {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: "",
-      password: "1234",
+      password: admin ? '' : '1234',
     },
   })
 
@@ -68,7 +67,9 @@ export const Login = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-white">Numéro</FormLabel>
+                  <FormLabel className="text-white">
+                    Numéro
+                  </FormLabel>
                   <FormControl>
                     <Input 
                       disabled={isPending}
@@ -85,7 +86,7 @@ export const Login = () => {
                 </FormItem>
               )}
             />
-            {showPassword && (
+            {admin && (
               <FormField
                 control={form.control}
                 name="password"

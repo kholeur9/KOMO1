@@ -2,10 +2,12 @@ import type { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { getUser } from "@/data/user";
 import { FormSchema } from "@/secure/number";
+import { FormActionSchema } from "@/secure/admin-site";
 
 export const authConfig = {
   providers: [
     Credentials({
+      //id: 'form-client',
       async authorize(credentials) {
 
         const valideFields = FormSchema.safeParse(credentials);
