@@ -25,12 +25,14 @@ import { Input } from "@/components/ui/input";
 import { uploadFile } from "@/actions/file-action";
 
 import { FormError } from "@/features/auth/form-error";
+import { FormSuccess } from "@/features/auth/form-success";
 
 import * as XLSX from "xlsx";
 
 export const ExcelForm = () => {
 
   const [ error, setError ] = useState<string>('');
+  const [ success, setSuccess ] = useState<string>('');
   const [ selectedFile, setSelectedFile ] = useState<File | null>(null);
   const [ sheetData, setSheetData ] = useState<any[][] | null>(null);
   
@@ -39,18 +41,30 @@ export const ExcelForm = () => {
   const form = useForm<z.infer<typeof fileSchema>> ({
     resolver: zodResolver(fileSchema),
     defaultValues: {
-      file: '',
+      file: undefined,
     }
   })
 
+  //const fileRef = form.register("file");
+
   const onSubmit = async (value: z.infer<typeof fileSchema>) => {
+    
     startTransition(() => {
-      uploadFile(value)
+      if(sheetData) {
+        uploadFile({ file : sheetData })
         .then((data) => {
           if (data && data.error){
             setError(data.error)
+          } else if (data && data.success) {
+            setSuccess(data.success)
           }
         })
+        .catch((error) => {
+          setError(error.message)
+        })
+      } else {
+        setError('Veuillez sélectionner un fichier')
+      }
     })
   }
 
@@ -60,6 +74,7 @@ export const ExcelForm = () => {
       setSelectedFile(file);
       try {
         const sheetData = await readExcelFile(file);
+        console.log('sheetData : ', sheetData);
         setSheetData(sheetData)
       } catch(error) {
         console.error('Erreur lors du chargement du fichier Excel', error)
@@ -74,12 +89,12 @@ export const ExcelForm = () => {
     const fileReader = new FileReader();
     fileReader.onload = (e) => {
       const data = e.target?.result as ArrayBuffer;
-      const workbook = XLSX.read(data, { type: 'array' });
+      const workbook = XLSX.read(data, { type: 'buffer' });
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
       const sheetData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
       const filterData = sheetData.slice(1)
-      resolve(filterData);
+      resolve(filterData as any[][]);
     };
     fileReader.onerror = (error) => {
       reject(error);
@@ -105,18 +120,26 @@ export const ExcelForm = () => {
                       {sheetData && (
                         <div className="flex items-center justify-center">
                           <div className="text-sm text-gray-500">
-                            <p className="font-[600]"><span className="text-blue-500 font-[700]">{sheetData.length}</span> lignes seront extraites</p>
+                            <p className="font-[600]">
+                              <span className="text-blue-500 font-[700]">{sheetData.length}</span> lignes seront extraites,{" "}
+                              <span className="text-blue-500 font-[700]">{sheetData[0].length}</span> colonnes au total
+                            </p>
+                            <p>Noms des colonnes :</p>
+                            <ul>
+                                  <li>MSISDN : {sheetData[0][0]}</li>
+                            </ul>
                           </div>
                         </div>
                       )}
                     </FormLabel>
                     <FormControl>
-                      <Input
+                      <input
                         id="excel_file"
                         type="file"
                         accept=".xlsx"
-                        className="hidden file-input file-input-bordered file-input-info w-full max-w-xs"
-                        onChange={(e) => {field.onChange(e);
+                        className="file-input file-input-bordered file-input-info w-full max-w-xs"
+                        onChange={(e) => {
+                          field.onChange(e)
                           handleClickChange(e)
                         }}
                         //{...field}
@@ -131,9 +154,10 @@ export const ExcelForm = () => {
                 )}
               />
               <FormError message={error}/>
+              <FormSuccess message={success}/>
               {selectedFile && (
       <Button disabled={isPending} type="submit" className="max-w-xs w-full h-[48px] bg-[#0390D0] hover:bg-[#036394] text-bg font-[600]">
-        {isPending ? <Loader className="mr-2 h-6 w-6"/> : "Extraire les données"}
+        {isPending ? <Loader className="mr-2 h-6 w-6 text-white"/> : "Extraire les données"}
       </Button>
               )}
           </form>

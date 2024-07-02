@@ -4,8 +4,9 @@ import { users } from "@/db/schema";
 import { totalCredit } from "@/db/schema";
 import { retraitCredit } from "@/db/schema";
 import { forfaits } from "@/db/schema";
+import { credits } from "@/db/schema";
 
-import { eq, sum, asc, sql, desc, count, ne } from "drizzle-orm";
+import { eq, sum, asc, sql, desc, count, ne, raw } from "drizzle-orm";
 
 import { DateTime } from "luxon";
 
@@ -31,14 +32,51 @@ export const getUserById = async (id : string ) => {
   }
 }
 
-export const countAllUsers = async (id: any) => {
+export const getForfaitByUserId = async (id : any ) => {
   try {
-    const countUser = await db.select({ value: count() }).from(users).where(ne(users.id, id))
-
-    const counted = countUser.map(user => user.value)
-    return counted;
+    const forfaitUserId = await db.query.forfaits.findMany({
+      where: eq(forfaits.userId, id),
+    })
+    return forfaitUserId[0];
   } catch (error) {
     throw new Error('Failed to fetch user.');
+  }
+}
+
+export const countAllUsers = async (id: any) => {
+  try {
+    const countUser = await db.select({value: count()}).from(users).where(ne(users.id, id))
+
+    const counted = countUser.map(user => user.value)
+
+    return {
+      value: counted,
+    }
+  } catch (error) {
+    throw new Error('Failed to fetch user.');
+  }
+}
+
+export const countedUserByDate = async () => {
+  try {
+    const countUserToday = await db.select({
+      createdAt : users.createdAt,
+    }).from(users)
+    
+    const counted = countUserToday.map((user) => {
+      const date = DateTime.fromJSDate(user.createdAt, { zone: 'Africa/Libreville' }).toFormat('yyyy-MM-dd')
+      const equal = date === DateTime.now().toFormat('yyyy-MM-dd')
+      //if (equal) {
+        //array.push(date)
+      //}
+      return equal;
+    })
+    //if (counted.length > 0) {
+//array.push(counted.filter(Boolean).length)
+    //}
+    return counted.length ?? 'Aucun ajout aujourd\'hui';
+  } catch (error) {
+    throw new Error('Failed to fetch counted user by date.');
   }
 }
 
@@ -51,6 +89,83 @@ export const countAllForfaits = async () => {
     return counted;
   } catch (error) {
     throw new Error('Failed to fetch forfait.');
+  }
+}
+
+export const countedForfaitByDate = async () => {
+  try {
+    const countForfaitToday = await db.select({
+      date : forfaits.date,
+    }).from(forfaits)
+
+    const counted = countForfaitToday.map((forfait) => {
+      const date = DateTime.fromJSDate(forfait.date, { zone: 'Africa/Libreville' }).toFormat('yyyy-MM-dd')
+      const equal = date === DateTime.now().toFormat('yyyy-MM-dd')
+      //if (equal) {
+        //array.push(date)
+      //}
+      return equal;
+    })
+    //if (counted.length > 0) {
+//array.push(counted.filter(Boolean).length)
+    //}
+    return counted.length ?? 'Aucun ajout aujourd\'hui';
+  } catch (error) {
+    throw new Error('Failed to fetch counted user by date.');
+  }
+}
+
+export const countAllCredits = async () => {
+  try {
+    const countCredit = await db.select({ value : sum(credits.credit) }).from(credits)
+    const counted = countCredit.map(credit => credit.value === null ? 0 : credit.value)
+    return counted;
+  } catch (error) {
+    throw new Error('Failed to fetch All credit.');
+  }
+}
+
+export const countedAllCreditByDate = async () => {
+  try {
+    const countCredit = await db.select({ value : sum(credits.credit) }).from(credits)
+    const counted = countCredit.map(credit => credit.value === null ? 0 : credit.value)
+    return counted;
+  } catch (error) {
+    throw new Error('Failed to fetch counted all credit by date.')
+  }
+}
+
+export const sumRetraitCredit = async () => {
+  try {
+    const sumRetrait = await db.select({ value: sum(retraitCredit.quantity) }).from(retraitCredit)
+    const summed = sumRetrait.map(retrait => retrait.value === null ? 0 : retrait.value);
+    
+    return summed;
+  } catch (error) {
+    throw new Error('Failed to fetch All retrait credit.')
+  }
+}
+
+export const countedRetraitByDate = async () => {
+  try {
+    const countRetraitToday = await db.select({
+      date : retraitCredit.date,
+    }).from(retraitCredit)
+
+    const counted = countRetraitToday.map((retrait) => {
+      const date = DateTime.fromJSDate(retrait.date, { zone: 'Africa/Libreville' }).toFormat('yyyy-MM-dd')
+      const equal = date === DateTime.now().toFormat('yyyy-MM-dd')
+      //if (equal) {
+        //array.push(date)
+      //}
+      //return equal;
+    })
+    //if (counted.length > 0) {
+//array.push(counted.filter(Boolean).length)
+    //}
+    return counted.length ?? 'Aucun ajout aujourd\'hui';
+  } catch (error) {
+    throw new Error('Failed to fetch counted user by date.');
   }
 }
 

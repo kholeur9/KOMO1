@@ -12,7 +12,7 @@ import {
 interface CardInfoProps {
   title: string;
   description: string;
-  footer?: string;
+  footer?: number | string;
   children: React.ReactNode;
   colorContent: string;
   icon?: React.ReactNode;
