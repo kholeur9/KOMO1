@@ -1,12 +1,13 @@
 //import { SignOut } from "@/data/signout";
 import Link from "next/link";
 
+interface HistoriquePageProps {
+  params: { historiqueId: string };
+}
+
 export default function HistoriquePage({
   params,
-} : {
-  params: any,
-  historiqueId: string;
-}) {
+} : HistoriquePageProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <h1 className="text-3xl font-bold text-white">Historique: Client ID : {params.historiqueId}</h1>

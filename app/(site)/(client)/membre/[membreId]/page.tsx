@@ -1,11 +1,11 @@
 import Link from "next/link";
 
+interface MembrePageProps {
+  params: { membreId: string };
+}
+
 export default function MembrePage({
-  params,
-} : {
-  params: any,
-  membreId: string;
-}) {
+  params } : MembrePageProps ) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <h1 className="text-3xl font-bold text-white">Devenir Membre : Client ID {params.membreId}</h1>

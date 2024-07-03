@@ -7,12 +7,11 @@ import { getLastWithDraw } from "@/data/user";
 
 import { userTotalCredit } from "@/data/user";
 
-export default async function RetraitPage({
-  params,
-} : {
-  params: any,
-  retraitId: string;
-}) {
+interface RetraitPageProps {
+  params: { retraitId: string };
+}
+
+export default async function RetraitPage({ params } : RetraitPageProps ) {
   const session = await getCurrentUser();
   const all_credit = session ? await userTotalCredit(session.id) : null;
   console.log('all_credit', all_credit);
