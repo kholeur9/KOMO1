@@ -16,7 +16,6 @@ import * as z from "zod";
 import { convertCreditSchema } from "@/secure/credit";
 
 export const ConvertCredit = async ( formData : z.infer<typeof convertCreditSchema> ) => {
-  console.log("Action", formData)
   
   const validateFields = convertCreditSchema.safeParse(formData);
 
@@ -34,19 +33,19 @@ export const ConvertCredit = async ( formData : z.infer<typeof convertCreditSche
 
   // Sauvegarder le retrait si tout est bon
   const totalCreditId = await userTotalCredit(ci);
-  console.log(`TotalCreditId`, totalCreditId);
   
   if (!totalCreditId){
-    console.log('Non recupéré !!');
     return {error : 'Erreur de récupération des credits.'}
   }
 
   const lastWithdraw = await getLastWithDraw(totalCreditId.id);
 
-  console.log(`LastWithdraw`, lastWithdraw.quantity);
-
-  if (lastWithdraw.allowWithdraw) {
-    return { error : 'Vous avez déjà éffectué un retrait dans les 24 heures.'}
+  if (lastWithdraw && lastWithdraw.allowWithdraw) {
+    if (lastWithdraw.allowWithdraw) {
+      return { error : 'Vous avez déjà éffectué un retrait dans les 24 heures.'}
+    }
+  } else {
+    return null;
   }
 
   let transactionError = null;
