@@ -20,12 +20,12 @@ export const ConvertCredit = async ( formData : z.infer<typeof convertCreditSche
   
   const validateFields = convertCreditSchema.safeParse(formData);
 
-  const { withdraw, quantity, numero, ci, total } = validateFields.data;
-
   //Vérifie les informations
   if (!validateFields.success) {
     return { error : "Votre échange a été Refusé"};
   }
+
+  const { withdraw, quantity, numero, ci, total } = validateFields.data;
 
   // Securise les echanges
   if (total < withdraw){
