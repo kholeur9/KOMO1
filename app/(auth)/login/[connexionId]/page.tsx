@@ -1,7 +1,7 @@
 import { Login } from "@/features/auth/login";
 import Image from "next/image";
 
-export default function LoginPage({ params, connexionId } : { params: any, connexionId: string }) {
+export default function LoginPage({ params } : { params: any, connexionId: string }) {
   const admin = params.connexionId === "admin";
   const client = params.connexionId === "client";
   return (
