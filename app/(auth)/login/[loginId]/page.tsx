@@ -3,6 +3,7 @@ import Image from "next/image";
 
 export default function LoginPage({
   params,
+  loginId
 } : {
   params: any,
   loginId: string;
@@ -14,7 +15,7 @@ export default function LoginPage({
       <div className="w-full flex flex-col items-center justify-center py-1.5 gap-2.5  absolute bottom-[-10px] right-0 left-0">
         <div className="w-full flex items-center justify-center gap-6">
           <div className="flex items-center gap-1">
-            <div className="w-[30px] h-30px] rounded-full overflow-hidden">
+            <div className="w-[30px] h-[30px] rounded-full overflow-hidden">
               <Image src="/logo.jpeg" alt="KOMO1" width={100} height={100} className="w-full" />
             </div>
             <p className="text-sm text-gray-400">Komo1</p>
