@@ -94,7 +94,7 @@ export const ConvertCredit = async ( formData : z.infer<typeof convertCreditSche
 
   if (transactionError) {
 
-    if (transactionError.message.includes('Transaction ::: Erreur lors de l\'envoi du SMS.')) {
+    if (transactionError instanceof Error &&  transactionError.message.includes('Transaction ::: Erreur lors de l\'envoi du SMS.')) {
       return { error : 'Problème interne, réessayer plus tard.'};
     }
 
