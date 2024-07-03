@@ -2,7 +2,6 @@ import { Login } from "@/features/auth/login";
 import Image from "next/image";
 
 interface LoginPageProps {
-  connexionId: string;
   params: { slug : string };
 }
 
@@ -49,8 +48,8 @@ export default function LoginPage({ params } : LoginPageProps ) {
             { client && "Bienvenue sur Komo1"}
           </h1>
           <p className="mt-0.5 max-w-md text-md text-white sm:text-xl md:mt-0.5 md:text-xl md:max-w-3xl">
-            { params.loginId === 'admin' && "Connectez-vous pour accéder à votre espace administrateur."}
-            { params.loginId === 'client' && "Echanger vos crédits en forfait internet."}
+            { params.slug === 'admin' && "Connectez-vous pour accéder à votre espace administrateur."}
+            { params.slug === 'client' && "Echanger vos crédits en forfait internet."}
           </p>
         </div>
         <Login admin={admin} />
