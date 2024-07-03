@@ -6,7 +6,7 @@ import { retraitCredit } from "@/db/schema";
 import { forfaits } from "@/db/schema";
 import { credits } from "@/db/schema";
 
-import { eq, sum, asc, sql, desc, count, ne, raw } from "drizzle-orm";
+import { eq, sum, desc, count, ne } from "drizzle-orm";
 
 import { DateTime } from "luxon";
 

@@ -1,5 +1,3 @@
-
-
 interface NameSectionProps {
   name_section: string;
   description?: string;
