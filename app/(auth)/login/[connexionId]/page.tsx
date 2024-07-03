@@ -1,9 +1,14 @@
 import { Login } from "@/features/auth/login";
 import Image from "next/image";
 
-export default function LoginPage({ params } : { params: any; connexionId: string; }) {
-  const admin = params.connexionId === "admin";
-  const client = params.connexionId === "client";
+interface LoginPageProps {
+  connexionId: string;
+  params: { slug : string };
+}
+
+export default function LoginPage({ params } : LoginPageProps ) {
+  const admin = params.slug === "admin";
+  const client = params.slug === "client";
   return (
     <>
       <div className="w-full flex flex-col items-center justify-center py-1.5 gap-2.5  absolute bottom-[-10px] right-0 left-0">
