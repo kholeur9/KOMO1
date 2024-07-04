@@ -8,6 +8,8 @@ export const userEnum = pgEnum('role', ['admin', 'client' ]);
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   name: text('numero').notNull().unique(),
+  email: text('email').unique(),
+  image: text('image'),
   password: text('password').default('1234'),
   role: userEnum('role').notNull().default('client'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),

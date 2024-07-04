@@ -12,10 +12,10 @@ import { DateTime } from "luxon";
 
 export const getUser = async (name: string) => {
   try {
-    const user = await db.query.users.findMany({
+    const user = await db.query.users.findFirst({
       where: eq(users.name, name)
     })
-    return user[0];
+    return user || null;
   } catch (error) {
     throw new Error('Failed to fetch user.');
   }

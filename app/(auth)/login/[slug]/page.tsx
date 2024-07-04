@@ -52,7 +52,7 @@ export default function LoginPage({ params } : LoginPageProps ) {
             { params.slug === 'client' && "Echanger vos crédits en forfait internet."}
           </p>
         </div>
-        <Login admin={admin} />
+        <Login admin={params.slug} />
       </div>
     </>
   )

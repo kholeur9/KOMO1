@@ -2,38 +2,33 @@ import type { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { getUser } from "@/data/user";
 import { FormSchema } from "@/secure/number";
+import bcrypt from 'bcryptjs'; // Import bcrypt for password hashing
 
 export const authConfig = {
   providers: [
     Credentials({
-      //id: 'form-client',
       async authorize(credentials) {
+        const validateFields = FormSchema.safeParse(credentials);
 
-        const valideFields = FormSchema.safeParse(credentials);
-        console.log("Auth_Config : ", valideFields);
-
-        if (valideFields.success) {
-          const { name, password } = valideFields.data;
-
+        if (validateFields.success) {
+          const { name, password } = validateFields.data;
+          
           const user = await getUser(name);
-
-          if (!user) {
+          if (!user || !user.password) {
             return null;
           }
-
-          const passwordsMatch = user.password === password;
+          
+          const passwordsMatch = password === user.password;
           
           if (passwordsMatch) {
-              return user;
+            return user;
           }
         }
-
-        console.log('Invalid credentials');
         return null;
-      },
-    }),
+      }
+    })
   ],
-  /**callbacks: {
+  /** callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith('/');

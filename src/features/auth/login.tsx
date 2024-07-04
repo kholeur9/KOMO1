@@ -26,25 +26,26 @@ import { FormSuccess } from "@/features/auth/form-success";
 
 import { authenticate } from '@/actions/login';
 
-export const Login = ( admin: any ) => {
+export const Login = ( { admin } : { admin : string }) => {
   //const router = useRouter();
 
   const [ success, setSuccess ] = useState<string>("");
   const [ error, setError ] = useState<string>("");
+  const [ typeLogin, setTypeLogin ] = useState()
   const [ isPending, startTransition ] = useTransition()
-  
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: "",
-      password: admin ? '' : '1234',
+      password: admin === 'admin' ? '' : '1234',
     },
   })
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     setError("");
     setSuccess("");
-    
+
     startTransition(() => {
       authenticate(values)
       .then((data) => {
@@ -68,12 +69,13 @@ export const Login = ( admin: any ) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-white">
-                    Numéro
+                    {admin === 'admin' && 'Identifiant'}
+                    {admin === 'client' && 'Numéro'}
                   </FormLabel>
                   <FormControl>
                     <Input 
                       disabled={isPending}
-                      placeholder="07*******" 
+                      placeholder={admin === 'admin' ? 'Identifiant' : '07*******'}
                       {...field}
                       className="h-[50px] outline-none text-md bg-[#1C2333] border-transparent text-white"
                       type="text"
@@ -86,7 +88,7 @@ export const Login = ( admin: any ) => {
                 </FormItem>
               )}
             />
-            {admin && (
+            {admin === 'admin' && (
               <FormField
                 control={form.control}
                 name="password"

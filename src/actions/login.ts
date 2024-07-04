@@ -17,7 +17,7 @@ export async function authenticate(
   const validateFields = FormSchema.safeParse(values);
   
   if (!validateFields.success){
-    return { error : "Numéro invalide."}
+    return { error : "Identifiant invalide."}
   }
   
   try {
@@ -40,7 +40,7 @@ export async function authenticate(
         case 'CredentialsSignin':
           throw error;
         default:
-          return { error : 'Something went wrong.'};
+          return { error : 'Un problème est survenu.'};
       }
     }
     throw error;
