@@ -7,15 +7,13 @@ export const userEnum = pgEnum('role', ['admin', 'client' ]);
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
-  name: text('numero').notNull().unique(),
-  email: text('email').unique(),
-  image: text('image'),
-  password: text('password').default('1234'),
+  username: text('numero').notNull().unique(),
+  password_hash: text('password').default('1234'),
   role: userEnum('role').notNull().default('client'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 }, (users) => {
   return {
-    nameIndex: uniqueIndex("name_idx").on(users.name)
+    nameIndex: uniqueIndex("name_idx").on(users.username)
   }
 });
 
@@ -52,3 +50,13 @@ export const retraitCredit = pgTable('retrait_credit', {
   date: timestamp('date', { withTimezone: true }).notNull().defaultNow(),
   status: text('status', { enum : ['en attente', 'réussi', 'échec'] }).notNull().default('en attente'),
 })
+
+export const sessionTable = pgTable("session", {
+  id: text("id").primaryKey(),
+  userId: integer("user_id")
+    .references(() => users.id),
+  expiresAt: timestamp("expires_at", {
+    withTimezone: true,
+    mode: "date"
+  }).notNull()
+});

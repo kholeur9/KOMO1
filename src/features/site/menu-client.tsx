@@ -1,18 +1,18 @@
-'use client';
-
 import { Menu, SubMenu } from "@/features/site/menu";
 
-interface MenuClientProps {
+/** interface MenuClientProps {
   session: any;
-}
+}*/
 
-export const MenuClient = ({ session } : MenuClientProps) => {
+import { validateRequest } from "@/data/current-user";
 
+export const MenuClient = async () => {
+  const { user } = await validateRequest();
   return (
     <>
       <Menu
         className="hover:border-orange-500"
-        href={`/retrait/${session.id}`}
+        href={`/retrait/${user?.id}`}
         description={'Cliquer et convertisser vos crédits en forfaits.'}
         header={'Crédit'}
         >
@@ -20,7 +20,7 @@ export const MenuClient = ({ session } : MenuClientProps) => {
       </Menu>
       <Menu
         className="hover:border-blue-500"
-        href={`/historique/${session.id}`}
+        href={`/historique/${user?.id}`}
         description={'Cliquer et regarder votre historique de retraits.'}
         header={'Historique'}
         >
@@ -30,7 +30,7 @@ export const MenuClient = ({ session } : MenuClientProps) => {
       <div className="w-full grid grid-cols-2 gap-2.5">
         <SubMenu
           className="hover:border-green-300"
-          href={`/membre/${session.id}`}
+          href={`/membre/${user?.id}`}
           header={'Membre'}
           description={'Cliquer et devenez membre.'}
           >

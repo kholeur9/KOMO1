@@ -37,8 +37,8 @@ export const Login = ( { admin } : { admin : string }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: "",
-      password: admin === 'admin' ? '' : '1234',
+      username: "",
+      password_hash: admin === 'admin' ? '' : '1234',
     },
   })
 
@@ -48,50 +48,54 @@ export const Login = ( { admin } : { admin : string }) => {
 
     startTransition(() => {
       authenticate(values)
-      .then((data) => {
-        if (data && data.success){
-          setSuccess(data.success)
-        } else if (data && data.error){
-          setError(data.error)
+        .then((data) => {
+        if (data && data.error) {
+          setError(data.error);
+        } else if (data && data.success) {
+          setSuccess(data.success);
         }
-      });
+      })
     });
   }
 
   return (
     <div className="h-2/3 flex flex-col items-center justify-center py-3.5">
-      <main className="h-full flex flex-col flex-1 items-center justify-center">
+      <main className="w-[400px] h-full flex flex-col flex-1 items-center justify-center px-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-white">
-                    {admin === 'admin' && 'Identifiant'}
-                    {admin === 'client' && 'Numéro'}
-                  </FormLabel>
-                  <FormControl>
-                    <Input 
-                      disabled={isPending}
-                      placeholder={admin === 'admin' ? 'Identifiant' : '07*******'}
-                      {...field}
-                      className="h-[50px] outline-none text-md bg-[#1C2333] border-transparent text-white"
-                      type="text"
-                    />
-                  </FormControl>
-                  <FormMessage />        
-                  <FormDescription className="text-white text-sm">
-                    Le numéro ne sera validé que si il a une historique d'achat de forfait internet via Komo1.<button onClick="" className="text-[#0390D0] ml-1.5"> Acheter ?</button>
-                  </FormDescription>
-                </FormItem>
-              )}
-            />
+            <div className="">
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-white">
+                      {admin === 'admin' && 'Identifiant'}
+                      {admin === 'client' && 'Numéro'}
+                    </FormLabel>
+                    <FormControl>
+                      <Input 
+                        disabled={isPending}
+                        placeholder={admin === 'admin' ? 'Identifiant' : '07*******'}
+                        {...field}
+                        className="h-[50px] outline-none text-md bg-[#1C2333] border-transparent text-white"
+                        type="text"
+                      />
+                    </FormControl>
+                    <FormMessage />        
+                    {admin !== 'admin' ? (
+                      <FormDescription className="text-white text-sm">
+                        Le numéro ne sera validé que si il a une historique d'achat de forfait internet via Komo1.<button onClick="" className="text-[#0390D0] ml-1.5"> Acheter ?</button>
+                      </FormDescription>
+                    ) : <FormDescription>Entrer votre identifiant d'administrateur</FormDescription>}
+                  </FormItem>
+                )}
+              />
+            </div>
             {admin === 'admin' && (
               <FormField
                 control={form.control}
-                name="password"
+                name="password_hash"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-white">Mot de passe</FormLabel>

@@ -1,10 +1,10 @@
-import { getCurrentUser } from "@/data/current-user";
+import { validateRequest } from "@/data/current-user";
 import { SignOut } from "@/data/signout";
 import Link from "next/link";
 
 export const HeaderAdmin = async () => {
-  const session = await getCurrentUser();
-  const user = session;
+  const { user } = await validateRequest();
+  
   return (
     <header>
       <div className="px-6 navbar bg-[#0E1525]">
@@ -44,7 +44,7 @@ export const HeaderAdmin = async () => {
                 </li>
               </ul>
             </div>
-          <p className="ml-0.5 text-white text-lg">{user?.name}</p>
+          <p className="ml-0.5 text-white text-lg">{user?.username}</p>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">

@@ -1,14 +1,11 @@
-import { signOut } from "@/auth";
 import { ButtonSignOut } from "@/features/auth/button-sign-out";
+
+import { logout } from "@/actions/logout"
 
 export const SignOut = () => {
   return (
     <div className="flex items-center">
-      <form action={async () => {
-        "use server";
-
-        await signOut();
-      }}>
+      <form action={logout}>
         <ButtonSignOut />
       </form>
     </div>

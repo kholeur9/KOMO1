@@ -4,6 +4,7 @@
 */
 export const publicRoutes = [
   "/setting",
+  "/aide",
 ]
 
 /**

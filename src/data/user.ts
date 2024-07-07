@@ -6,17 +6,18 @@ import { retraitCredit } from "@/db/schema";
 import { forfaits } from "@/db/schema";
 import { credits } from "@/db/schema";
 
-import { eq, sum, desc, count, ne } from "drizzle-orm";
+import { eq, sum, desc, count, ne, and } from "drizzle-orm";
 
 import { DateTime } from "luxon";
 
-export const getUser = async (name: string) => {
+export const getUser = async (username: string) => {
   try {
-    const user = await db.query.users.findFirst({
-      where: eq(users.name, name)
-    })
-    return user || null;
+    const user = await db.select().from(users).where(
+        eq(users.username, username),
+    );
+    return user[0];
   } catch (error) {
+    console.error('Failed to fetch user:', error);
     throw new Error('Failed to fetch user.');
   }
 }

@@ -1,6 +1,6 @@
 import { CardInfo } from "./card-info";
 
-import { getCurrentUser } from "@/data/current-user";
+import { validateRequest } from "@/data/current-user";
 import { countAllUsers } from "@/data/user";
 import { countAllForfaits } from "@/data/user";
 import { countAllCredits } from "@/data/user";
@@ -12,8 +12,8 @@ import { countedRetraitByDate } from "@/data/user";
 
 export const MainCard = async () => {
   const forfaits = await countAllForfaits();
-  const session = await getCurrentUser();
-  const users = await countAllUsers(session?.id);
+  const { user } = await validateRequest();
+  const users = await countAllUsers(user?.id);
   const credits = await countAllCredits();
   const retraits = await sumRetraitCredit();
   const countedUser = await countedUserByDate();
