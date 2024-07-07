@@ -62,7 +62,7 @@ export const uploadFile = async (value: z.infer<typeof fileSchema>) => {
         // créer l'utilisateur
         try {
           const createdUser = await db.insert(users).values({
-            name: row[0],
+            username: row[0],
           })
 
           // créer le forfait
