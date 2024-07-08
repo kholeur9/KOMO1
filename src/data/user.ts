@@ -6,7 +6,7 @@ import { retraitCredit } from "@/db/schema";
 import { forfaits } from "@/db/schema";
 import { credits } from "@/db/schema";
 
-import { eq, sum, desc, count, ne, and } from "drizzle-orm";
+import { eq, sum, desc, count, ne } from "drizzle-orm";
 
 import { DateTime } from "luxon";
 
@@ -22,7 +22,7 @@ export const getUser = async (username: string) => {
   }
 }
 
-export const getUserById = async (id : string ) => {
+export const getUserById = async (id : number ) => {
   try {
     const user = await db.query.users.findMany({
       where: eq(users.id, id)
@@ -220,12 +220,12 @@ export const getLastWithDraw = async ( id : any ) => {
         // Get time of last withdraw this client
         const formattedDate = DateTime.fromJSDate(item.date, { zone: 'Africa/Libreville' })
         // parse this tims in millisecond
-        const parseInMillis = formattedDate.toMillis();
+        //const parseInMillis = formattedDate.toMillis();
 
         // Get date today
         const toDay = DateTime.local({ zone: 'Africa/Libreville' });
         // parse today in millisecond
-        const zoneToday = toDay.toMillis();
+        //const zoneToday = toDay.toMillis();
 
         // Get difference between today and last withdraw
         const diffTimeByLuxon = toDay.diff(formattedDate);
