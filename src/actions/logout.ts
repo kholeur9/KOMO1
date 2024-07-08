@@ -10,7 +10,7 @@ interface ActionResult {
 }
 
 export async function logout(): Promise<ActionResult> {
-  const { session } = await validateRequest();
+  const { session, user } = await validateRequest();
   if (!session) {
     return {
       error: 'Vous devez être connecté pour vous déconnecter.',
@@ -21,5 +21,13 @@ export async function logout(): Promise<ActionResult> {
 
   const sessionCookie = lucia.createBlankSessionCookie();
   cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-  return redirect("/login");
+
+  /** if (session.userId === user.id) {
+    if (user.role === 'admin') {
+      redirect('/login/admin');
+    } else if (user.role === 'client') {
+      redirect('/login/client');
+    }
+  }*/
+  return redirect(`/login/${user.role}`);
 }
