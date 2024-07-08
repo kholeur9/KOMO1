@@ -1,6 +1,6 @@
 import { db } from "@/db";
 
-import { users } from "@/db/schema";
+import { userTable } from "@/db/schema";
 import { totalCredit } from "@/db/schema";
 import { retraitCredit } from "@/db/schema";
 import { forfaits } from "@/db/schema";
@@ -12,8 +12,8 @@ import { DateTime } from "luxon";
 
 export const getUser = async (username: string) => {
   try {
-    const user = await db.select().from(users).where(
-        eq(users.username, username),
+    const user = await db.select().from(userTable).where(
+        eq(userTable.username, username),
     );
     return user[0];
   } catch (error) {
@@ -24,8 +24,8 @@ export const getUser = async (username: string) => {
 
 export const getUserById = async (id : number ) => {
   try {
-    const user = await db.query.users.findMany({
-      where: eq(users.id, id)
+    const user = await db.query.userTable.findMany({
+      where: eq(userTable.id, id)
     })
     return user[0];
   } catch (error) {
@@ -46,7 +46,7 @@ export const getForfaitByUserId = async (id : any ) => {
 
 export const countAllUsers = async (id: any) => {
   try {
-    const countUser = await db.select({value: count()}).from(users).where(ne(users.id, id))
+    const countUser = await db.select({value: count()}).from(userTable).where(ne(userTable.id, id))
 
     const counted = countUser.map(user => user.value)
 
@@ -61,8 +61,8 @@ export const countAllUsers = async (id: any) => {
 export const countedUserByDate = async () => {
   try {
     const countUserToday = await db.select({
-      createdAt : users.createdAt,
-    }).from(users)
+      createdAt : userTable.createdAt,
+    }).from(userTable)
     
     const counted = countUserToday.map((user) => {
       const date = DateTime.fromJSDate(user.createdAt, { zone: 'Africa/Libreville' }).toFormat('yyyy-MM-dd')

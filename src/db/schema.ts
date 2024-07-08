@@ -5,7 +5,7 @@ import { sum, eq } from 'drizzle-orm';
 
 export const userEnum = pgEnum('role', ['admin', 'client' ]);
 
-export const users = pgTable('users', {
+export const userTable = pgTable('users', {
   id: serial('id').primaryKey(),
   username: text('numero').notNull().unique(),
   password_hash: text('password').default('1234'),
@@ -19,14 +19,14 @@ export const users = pgTable('users', {
 
 export const forfaits = pgTable('forfaits_internet', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id').references(() => users.id),
+  userId: integer('user_id').references(() => userTable.id),
   forfait: integer('forfait').notNull().default(0),
   date: timestamp('date', { withTimezone: true }).notNull().defaultNow(),
 });
 
 export const credits = pgTable('credits', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id').references(() => users.id),
+  userId: integer('user_id').references(() => userTable.id),
   forfaitId: integer('forfait_id').references(() => forfaits.id),
   credit: integer('credit').notNull().default(0),
   date: timestamp('date', { withTimezone: true }).notNull().defaultNow(),
@@ -34,7 +34,7 @@ export const credits = pgTable('credits', {
 
 export const totalCredit = pgTable('total_credit', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id').references(() => users.id),
+  userId: integer('user_id').references(() => userTable.id),
   total_credit: integer('total_credit').notNull().default(0)
 }, (totalCredit) => {
   return {
@@ -54,7 +54,8 @@ export const retraitCredit = pgTable('retrait_credit', {
 export const sessionTable = pgTable("session", {
   id: text("id").primaryKey(),
   userId: integer("user_id")
-    .references(() => users.id),
+    .notNull()
+    .references(() => userTable.id),
   expiresAt: timestamp("expires_at", {
     withTimezone: true,
     mode: "date"

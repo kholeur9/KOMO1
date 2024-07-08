@@ -10,7 +10,7 @@ import * as XLSX from "xlsx";
 import { fileSchema } from "@/secure/file-schema";
 //import { sendData } from "@/lib/excel";
 
-import { users } from "@/db/schema";
+import { userTable } from "@/db/schema";
 import { forfaits } from "@/db/schema";
 import { credits } from "@/db/schema";
 import { db } from "@/db";
@@ -61,7 +61,7 @@ export const uploadFile = async (value: z.infer<typeof fileSchema>) => {
       } else {
         // créer l'utilisateur
         try {
-          const createdUser = await db.insert(users).values({
+          const createdUser = await db.insert(userTable).values({
             username: row[0],
           })
 
