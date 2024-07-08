@@ -38,7 +38,7 @@ export default function LoginPage({ params } : LoginPageProps ) {
           </p>
         </div>
       </div>
-      <div className="flex flex-col py-2.5 h-screen overflow-hidden">
+      <div className="flex flex-col py-2.5 h-screen">
         <div className="flex flex-col">
           <div className="w-[50px] h-50px] rounded-full overflow-hidden">
             <Image src="/logo.jpeg" alt="KOMO1" width={100} height={100} className="w-full" />
