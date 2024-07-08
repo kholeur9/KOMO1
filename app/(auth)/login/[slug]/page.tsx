@@ -38,7 +38,7 @@ export default function LoginPage({ params } : LoginPageProps ) {
           </p>
         </div>
       </div>
-      <div className="flex flex-col p-2.5 px-6 h-screen">
+      <div className="flex flex-col p-2.5 px-6 h-screen overflow-hidden">
         <div className="flex flex-col">
           <div className="w-[50px] h-50px] rounded-full overflow-hidden">
             <Image src="/logo.jpeg" alt="KOMO1" width={100} height={100} className="w-full" />
@@ -52,7 +52,9 @@ export default function LoginPage({ params } : LoginPageProps ) {
             { params.slug === 'client' && "Echanger vos crédits en forfait internet."}
           </p>
         </div>
-        <Login admin={params.slug} />
+        <div className="flex flex-col">
+          <Login admin={params.slug} />
+        </div>
       </div>
     </>
   )

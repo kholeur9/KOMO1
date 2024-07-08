@@ -76,7 +76,7 @@ export const Login = ( { admin } : { admin : string }) => {
                         disabled={isPending}
                         placeholder={admin === 'admin' ? 'Identifiant' : '07*******'}
                         {...field}
-                        className="h-[50px] outline-none text-md bg-[#1C2333] border-transparent text-white"
+                        className="w-full h-[50px] outline-none text-md bg-[#1C2333] border-transparent text-white"
                         type="text"
                       />
                     </FormControl>
@@ -102,7 +102,7 @@ export const Login = ( { admin } : { admin : string }) => {
                         disabled={isPending}
                         placeholder="****"
                         {...field}
-                        className="h-[50px] outline-none text-md bg-[#1C2333] border-transparent text-white"
+                        className="w-full h-[50px] outline-none text-md bg-[#1C2333] border-transparent text-white"
                         type="password"
                       />
                     </FormControl>
