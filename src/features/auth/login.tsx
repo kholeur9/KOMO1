@@ -51,8 +51,6 @@ export const Login = ( { admin } : { admin : string }) => {
         .then((data) => {
         if (data && data.error) {
           setError(data.error);
-        } else if (data && data.success) {
-          setSuccess(data.success);
         }
       })
     });
@@ -114,7 +112,6 @@ export const Login = ( { admin } : { admin : string }) => {
               />
             )}
             <FormError message={error} />
-            <FormSuccess message={success} />
             <Button disabled={isPending} type="submit" className="w-full h-[48px] bg-[#0390D0] hover:bg-[#036394]">
               {isPending ? 
               <div className="flex items-center">
