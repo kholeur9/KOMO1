@@ -83,7 +83,7 @@ export const Login = ( { admin } : { admin : string }) => {
                     <FormMessage />        
                     {admin !== 'admin' ? (
                       <FormDescription className="text-white text-sm">
-                        Le numéro ne sera validé que si il a une historique d'achat de forfait internet via Komo1.<button onClick="" className="text-[#0390D0] ml-1.5"> Acheter ?</button>
+                        Le numéro ne sera validé que si il a une historique d'achat de forfait internet via Komo1.
                       </FormDescription>
                     ) : <FormDescription>Entrer votre identifiant d'administrateur</FormDescription>}
                   </FormItem>
