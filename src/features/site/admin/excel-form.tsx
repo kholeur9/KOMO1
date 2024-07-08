@@ -119,13 +119,8 @@ export const ExcelForm = () => {
                         <div className="flex items-center justify-center">
                           <div className="text-sm text-gray-500">
                             <p className="font-[600]">
-                              <span className="text-blue-500 font-[700]">{sheetData.length}</span> lignes seront extraites,{" "}
-                              <span className="text-blue-500 font-[700]">{sheetData[0].length}</span> colonnes au total
+                              <span className="text-blue-500 font-[700]">{sheetData.length}</span> lignes seront extraites.
                             </p>
-                            <p>Noms des colonnes :</p>
-                            <ul>
-                                  <li>MSISDN : {sheetData[0][0]}</li>
-                            </ul>
                           </div>
                         </div>
                       )}
@@ -135,7 +130,7 @@ export const ExcelForm = () => {
                         id="excel_file"
                         type="file"
                         accept=".xlsx"
-                        className="file-input file-input-bordered file-input-info w-full max-w-xs"
+                        className="hidden file-input file-input-bordered file-input-info w-full max-w-xs"
                         onChange={(e) => {
                           field.onChange(e)
                           handleClickChange(e)
