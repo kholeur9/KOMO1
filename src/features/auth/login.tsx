@@ -58,7 +58,7 @@ export const Login = ( { admin } : { admin : string }) => {
 
   return (
     <div className="h-2/3 flex flex-col items-center justify-center py-3.5">
-      <main className="w-[400px] h-full flex flex-col flex-1 items-center justify-center px-6">
+      <main className="w-full h-full flex flex-col items-center justify-center">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
             <div className="">

@@ -9,7 +9,7 @@ export default function LoginPage({ params } : LoginPageProps ) {
   const admin = params.slug === "admin";
   const client = params.slug === "client";
   return (
-    <>
+    <div className="flex flex-col h-full px-6">
       <div className="w-full flex flex-col items-center justify-center py-1.5 gap-2.5  absolute bottom-[-10px] right-0 left-0">
         <div className="w-full flex items-center justify-center gap-6">
           <div className="flex items-center gap-1">
@@ -38,7 +38,7 @@ export default function LoginPage({ params } : LoginPageProps ) {
           </p>
         </div>
       </div>
-      <div className="flex flex-col p-2.5 px-6 h-screen overflow-hidden">
+      <div className="flex flex-col py-2.5 h-screen overflow-hidden">
         <div className="flex flex-col">
           <div className="w-[50px] h-50px] rounded-full overflow-hidden">
             <Image src="/logo.jpeg" alt="KOMO1" width={100} height={100} className="w-full" />
@@ -52,10 +52,10 @@ export default function LoginPage({ params } : LoginPageProps ) {
             { params.slug === 'client' && "Echanger vos crédits en forfait internet."}
           </p>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col h-full">
           <Login admin={params.slug} />
         </div>
       </div>
-    </>
+    </div>
   )
 }
