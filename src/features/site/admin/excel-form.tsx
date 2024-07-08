@@ -55,8 +55,6 @@ export const ExcelForm = () => {
         .then((data) => {
           if (data && data.error){
             setError(data.error)
-          } else if (data && data.success) {
-            setSuccess(data.success)
           }
         })
         .catch((error) => {
@@ -154,7 +152,6 @@ export const ExcelForm = () => {
                 )}
               />
               <FormError message={error}/>
-              <FormSuccess message={success}/>
               {selectedFile && (
       <Button disabled={isPending} type="submit" className="max-w-xs w-full h-[48px] bg-[#0390D0] hover:bg-[#036394] text-bg font-[600]">
         {isPending ? <Loader className="mr-2 h-6 w-6 text-white"/> : "Extraire les données"}

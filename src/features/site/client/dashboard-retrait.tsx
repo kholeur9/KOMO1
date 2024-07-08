@@ -23,7 +23,7 @@ export const Dashboard = async ({ numero, total_credit, total_credit_id, credit_
             <span className="text-[13px] text-white font-[600]">Numéro : </span>
             <p className="text-[13px] text-white font-[600]">{numero}</p>
           </div>
-            {total_credit >= credit_minimum && !lastWithdraw.allowWithdraw ? (
+            {total_credit >= credit_minimum && !lastWithdraw?.allowWithdraw ? (
               <Badge className="bg-green-400 gap-1 text-emerald-700">
                 <CheckCircledIcon className="w-4 h-4" />
                 <span className="text-[12px] font-[600]">Echange Disponible</span>
