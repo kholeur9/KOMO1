@@ -1,11 +1,9 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { redirect } from "next/navigation";
 
 import * as z from "zod";
-import * as fs from "fs/promises";
-
-import * as XLSX from "xlsx";
 
 import { fileSchema } from "@/secure/file-schema";
 //import { sendData } from "@/lib/excel";
@@ -17,8 +15,6 @@ import { db } from "@/db";
 
 import { getUser } from "@/data/user";
 import { getForfaitByUserId } from "@/data/user";
-
-import { DateTime } from "luxon";
 
 export const uploadFile = async (value: z.infer<typeof fileSchema>) => {
 
@@ -67,19 +63,23 @@ export const uploadFile = async (value: z.infer<typeof fileSchema>) => {
 
           // créer le forfait
           const createdUserWithId = await getUser(row[0])
+          if (createdUser) {
+            const forfaitCreated = await db.insert(forfaits).values({
+              userId: createdUserWithId.id,
+              forfait: row[2],
+            })
 
-          const forfaitCreated = await db.insert(forfaits).values({
-            userId: createdUserWithId.id,
-            forfait: row[2],
-          })
-
-          // créer le crédit
-          const forfaitCreatedWithId = await getForfaitByUserId(createdUserWithId.id)
-          const creditCreated = await db.insert(credits).values({
-            userId: createdUserWithId.id,
-            forfaitId: forfaitCreatedWithId.id,
-            credit: calcul,
-          })
+            // créer le crédit
+            const forfaitCreatedWithId = await getForfaitByUserId(createdUserWithId.id)
+            if (forfaitCreated) {
+              await db.insert(credits).values({
+                userId: createdUserWithId.id,
+                forfaitId: forfaitCreatedWithId.id,
+                credit: calcul,
+              })
+            }
+          }
+          continue;
         } catch (error) {
           console.log('Erreur lors de la création de l\'utilisateur', error)
           throw new Error('Erreur lors de la création de l\'utilisateur')
@@ -92,4 +92,5 @@ export const uploadFile = async (value: z.infer<typeof fileSchema>) => {
   }
 
   revalidatePath('/register-data')
+  redirect('/admin')
 }

@@ -16,7 +16,7 @@ export default async function Home() {
   if (user?.role === 'admin') {
     redirect('/admin');
   } else if (!user) {
-    redirect('/login')
+    redirect('/login/client')
   }
   
   return (

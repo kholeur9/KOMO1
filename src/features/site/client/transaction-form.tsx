@@ -78,7 +78,7 @@ export const TransactionForm = ({ onSubmit, withdraw, quantity, numero, ci, tota
 
   return (
       <div className={clsx(`w-full flex flex-row items-center justify-between px-2.5 py-2.5 bg-[#90CAF9] rounded-md`)}>
-        <Toaster expand={true} position="top-center" richColors />
+        <Toaster expand={true} position="top-right" richColors />
         <div>
           <span className="text-[13px] text-[#036394] font-[700]">Echanger <span className="ml-1 mr-1 font-[900]">{withdraw}</span>crédits pour<span className="ml-1 font-[900]">{quantity} Mo</span></span>
         </div>
