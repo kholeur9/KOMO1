@@ -1,13 +1,21 @@
 //import { SignOut } from "@/data/signout";
 import Link from "next/link";
 
+import { validateRequest } from "@/data/current-user";
+import { redirect } from "next/navigation";
+
 interface HistoriquePageProps {
   params: { historiqueId: string };
 }
 
-export default function HistoriquePage({
+export default async function HistoriquePage({
   params,
 } : HistoriquePageProps) {
+
+  const { user } = await validateRequest();
+  if (user?.role !== 'admin' || !user) {
+    redirect('/login/client')
+  }
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <h1 className="text-3xl font-bold text-white">Historique: Client ID : {params.historiqueId}</h1>

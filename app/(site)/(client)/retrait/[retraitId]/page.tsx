@@ -3,7 +3,8 @@ import { DashboardInfo } from "@/features/site/client/dashboard-info";
 
 //import { auth } from "@/auth";
 import { validateRequest } from "@/data/current-user";
-import { getLastWithDraw } from "@/data/user";
+import { redirect } from "next/navigation";
+//import { getLastWithDraw } from "@/data/user";
 
 import { userTotalCredit } from "@/data/user";
 
@@ -16,7 +17,11 @@ export default async function RetraitPage({ params } : RetraitPageProps ) {
   const all_credit = user ? await userTotalCredit(user?.id) : null;
   console.log('all_credit', all_credit);
 
-  const lastQuantity = await getLastWithDraw(all_credit?.id);
+  //const lastQuantity = await getLastWithDraw(all_credit?.id);
+
+  if (user?.role !== 'admin' || !user) {
+    redirect('/login/client')
+  }
   
   return (
     <div className="flex flex-col py-0.5">
@@ -26,7 +31,7 @@ export default async function RetraitPage({ params } : RetraitPageProps ) {
       <section className="w-full flex flex-col items-center px-4 py-2 space-y-4">
         <h1 className="w-full flex items-center text-gray-200 text-md font-[600] gap-2">Crédit</h1>
         <div className="w-full grid grid-cols-1 gap-2.5">
-          <CreditMenu all_credit={all_credit} session={user} lastQuantity={lastQuantity} />
+          <CreditMenu all_credit={all_credit} session={user} />
         </div>
       </section>
       

@@ -6,12 +6,10 @@ import { ChevronDown } from "lucide-react"
 interface CreditProps {
   idx: string;
   withdraw: number;
-  lastQuantity: number;
-  allowWithdraw: boolean;
   quantity: string;
   value: string;
   numero: string;
-  ci: string;
+  ci: number;
   total: number;
 }
 
@@ -24,16 +22,16 @@ import {
 
 import { TransactionForm } from "@/features/site/client/transaction-form";
 
-export const Credit = ({ withdraw, lastQuantity, allowWithdraw, quantity, value, idx, numero, ci, total } : CreditProps ) => {
+export const Credit = ({ withdraw, quantity, value, idx, numero, ci, total } : CreditProps ) => {
   const [ activeAccordion, setActiveAccordion ] = useState<string | null>(null);
 
   const handleAccordionClick = ( accordionId: string ) => {
     setActiveAccordion(activeAccordion === accordionId ? null : accordionId);
   }
 
-  const handleFormSubmit = (formData : { withdraw: number, quantity: string }) => {
+  /** const handleFormSubmit = (formData : { withdraw: number, quantity: string }) => {
     console.log('form submit', formData);
-  }
+  }*/
 
   return (
     <>
@@ -46,19 +44,13 @@ export const Credit = ({ withdraw, lastQuantity, allowWithdraw, quantity, value,
               </span>
               <div className="flex-1 flex flex-col items-start justify-between h-full gap-1.5">
                 <span className="font-[600] text-gray-200 text-[14px]">{withdraw} crédits</span>
-                {allowWithdraw && lastQuantity === withdraw ? (
-      <p className="text-[10px] text-red-500 font-[600]">
-        Ce retrait a été fait dans les 24 heures.
-      </p>
-                ) : (
-      <p className="text-[10px] text-gray-200">
-        {allowWithdraw && lastQuantity !== withdraw ? <span className="text-red-500 font-[600]">Indisponible</span> : 'Disponibilité' } : un retrait une fois par jour.
-      </p>
-                )}
+                <p className="text-[10px] text-white font-[600]">
+        Cliquer pour échanger en forfait internet.
+                </p>
               </div>
               <span className="flex flex-row h-full justify-center items-center gap-0.5">
                 <span className="flex text-[12px] font-[600] gap-0.5 text-gray-300">{quantity} <span className="ml-0.5 text-[#0390D0]">Mo</span></span>
-                <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
+                <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200 text-white" />
               </span>
             </div>
           </AccordionTrigger>
@@ -70,7 +62,7 @@ export const Credit = ({ withdraw, lastQuantity, allowWithdraw, quantity, value,
                  numero={numero}
                  ci={ci}
                  total={total}
-                 onSubmit={handleFormSubmit}
+                 //onSubmit={handleFormSubmit}
                 />
             </AccordionContent>
           )}

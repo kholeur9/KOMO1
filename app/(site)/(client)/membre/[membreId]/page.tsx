@@ -1,11 +1,20 @@
 import Link from "next/link";
 
+import { validateRequest } from "@/data/current-user";
+import { redirect } from "next/navigation";
+
 interface MembrePageProps {
   params: { membreId: string };
 }
 
-export default function MembrePage({
+export default async function MembrePage({
   params } : MembrePageProps ) {
+  const { user } = await validateRequest();
+
+  if (user?.role !== 'admin' || !user) {
+    redirect('/login/client')
+  }
+  
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <h1 className="text-3xl font-bold text-white">Devenir Membre : Client ID {params.membreId}</h1>

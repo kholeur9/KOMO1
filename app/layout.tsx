@@ -4,7 +4,7 @@ import "./globals.css";
 
 import clsx from "clsx";
 
-import { Toaster } from 'sonner';
+//import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html data-theme="dark" lang="en" className="h-full">
       <body className={clsx(inter.className, 'h-full')}>
-        <Toaster expand={true} position="top-right" richColors />
+        
         <div className="flex flex-col h-full">
           {children}
         </div>

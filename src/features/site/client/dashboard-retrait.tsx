@@ -7,7 +7,7 @@ import { getLastWithDraw } from "@/data/user";
 interface DashboardProps {
   numero: string;
   total_credit: number;
-  total_credit_id: string;
+  total_credit_id: number;
   credit_minimum: number;
 }
 
@@ -40,7 +40,7 @@ export const Dashboard = async ({ numero, total_credit, total_credit_id, credit_
             <span className="text-[13px] text-white text-start font-[500]">
               Crédits cumulés
             </span>
-            <span className="text-[14px] text-white font-[600] text-end">
+            <span className="text-[16px] text-white font-[600] text-end">
               {total_credit}
             </span>
           </div>
@@ -48,7 +48,7 @@ export const Dashboard = async ({ numero, total_credit, total_credit_id, credit_
             <span className="text-[13px] text-white text-start font-[500]">
               Crédits minimum à retirer
             </span>
-            <span className="text-[14px] text-white font-[600] text-end">
+            <span className="text-[16px] text-white font-[600] text-end">
               {credit_minimum}
             </span>
           </div>

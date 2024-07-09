@@ -58,7 +58,7 @@ export const Login = ( { admin } : { admin : string }) => {
 
   return (
     <div className="h-2/3 flex flex-col items-center justify-center py-3.5">
-      <main className="w-full h-full flex flex-col items-center justify-center">
+      <main className="w-full flex-1 h-full flex flex-col items-center justify-center">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
             <div className="">
@@ -100,7 +100,7 @@ export const Login = ( { admin } : { admin : string }) => {
                     <FormControl>
                       <Input
                         disabled={isPending}
-                        placeholder="****"
+                        placeholder="********"
                         {...field}
                         className="w-full h-[50px] outline-none text-md bg-[#1C2333] border-transparent text-white"
                         type="password"
@@ -112,11 +112,11 @@ export const Login = ( { admin } : { admin : string }) => {
               />
             )}
             <FormError message={error} />
-            <Button disabled={isPending} type="submit" className="w-full h-[48px] bg-[#0390D0] hover:bg-[#036394]">
+            <Button disabled={isPending} type="submit" className="w-full h-[48px] bg-[#0390D0] hover:bg-[#036394] font-semibold">
               {isPending ? 
               <div className="flex items-center">
                 <Loader className="mr-2 h-6 w-6"/>
-                vérification du numéro
+                {admin === 'admin' ? 'vérification de l\'admin' : 'Vérification du numéro'}
               </div>
                : "valider"}
             </Button>

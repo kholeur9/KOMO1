@@ -29,7 +29,7 @@ export const MainCard = async () => {
         description={"Toute période"}
         colorContent={"text-orange-500"}
         icon={<i className="fi fi-rs-users text-[15px]"></i>}
-        footer={`+ ${countedUser}`}
+        //footer={`+ ${countedUser}`}
       >
         {users.value}
       </CardInfo>
@@ -38,7 +38,7 @@ export const MainCard = async () => {
         title={"Transaction"}
         description={"Toute période"}
         icon={<i className="fi fi-rr-wallet-arrow text-[15px]"></i>}
-        footer={`+ ${countedForfait}`}
+        //footer={`+ ${countedForfait}`}
       >
         {forfaits}
       </CardInfo>

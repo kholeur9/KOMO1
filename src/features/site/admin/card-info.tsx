@@ -32,7 +32,7 @@ export const CardInfo = ( { title, description, footer, children, colorContent, 
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <p className={clsx(`text-2xl font-[600]`, colorContent)}>{children}</p>
+        <p className={clsx(`text-2xl font-[700]`, colorContent)}>{children}</p>
       </CardContent>
       <CardFooter>
         <p className="text-white text-xs">{footer}</p>

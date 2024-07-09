@@ -113,7 +113,7 @@ export const ExcelForm = () => {
                   <FormItem>
                     <FormLabel htmlFor="excel_file">
                       <div className="flex items-center justify-center">
-                        <i className="fi fi-sr-file-excel text-[150px] text-blue-300"></i>
+                        {isPending ? ( <div className="flex flex-col items-center space-y-4 mb-4"><Loader className="w-[100px] h-[100px] text-blue-300"/><span className="text-blue-300">N'éteignez pas l'écran durant le procésusse</span></div> ) :(<i className="fi fi-sr-file-excel text-[150px] text-blue-300"></i>)}
                       </div>
                       {sheetData && (
                         <div className="flex items-center justify-center">
@@ -149,7 +149,7 @@ export const ExcelForm = () => {
               <FormError message={error}/>
               {selectedFile && (
       <Button disabled={isPending} type="submit" className="max-w-xs w-full h-[48px] bg-[#0390D0] hover:bg-[#036394] text-bg font-[600]">
-        {isPending ? <Loader className="mr-2 h-6 w-6 text-white"/> : "Extraire les données"}
+        {isPending ? "Patienter..." : "Extraire les données"}
       </Button>
               )}
           </form>

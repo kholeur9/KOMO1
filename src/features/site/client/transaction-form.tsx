@@ -30,16 +30,15 @@ import { ConvertCredit } from "@/actions/convert-credit";
 import { convertCreditSchema } from "@/secure/credit";
 
 interface TransactionFormProps {
-  onSubmit: (formData : { withdraw: number, quantity: string }) => void;
+  //onSubmit: (formData : { withdraw: number, quantity: string }) => void;
   withdraw: number;
   quantity: string;
   numero: string;
-  ci: string;
+  ci: number;
   total: number;
 }
 
-export const TransactionForm = ({ onSubmit, withdraw, quantity, numero, ci, total } : TransactionFormProps ) => {
-  const [ formData, setormData ] = useState({ withdraw: 0, quantity: '' });
+export const TransactionForm = ({ withdraw, quantity, numero, ci, total } : TransactionFormProps ) => {
   const [ isPending, startTransition ] = useTransition();
   const [ success, setSuccess ] = useState<boolean>(false);
   const [ error, setError ] = useState<boolean>(false);
@@ -70,8 +69,6 @@ export const TransactionForm = ({ onSubmit, withdraw, quantity, numero, ci, tota
             setSuccess(true)
           }
         })
-      
-      onSubmit(formData);
     })
   }
 
@@ -82,13 +79,13 @@ export const TransactionForm = ({ onSubmit, withdraw, quantity, numero, ci, tota
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(creditSubmit)}>
-            <Button disabled={isPending} type="submit" className={clsx(`w-full h-[25px] ${error ? "bg-red-300" : "bg-[#0390D0]"} hover:bg-[#036394]`)}>
+            <Button disabled={isPending} type="submit" className={clsx(`w-full h-[25px] bg-[#0390D0] hover:bg-[#036394]`)}>
               {isPending ? 
               <div className="flex items-center">
                 <Loader className="mr-3 h-4 w-4"/>
                 traitement
               </div>
-               : (error ? "échec" : "valider")}
+               : "valider"}
             </Button>
           </form>
         </Form>

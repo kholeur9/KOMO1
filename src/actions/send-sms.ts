@@ -1,9 +1,8 @@
 'use server';
 
-import { revalidatePath } from "next/cache";
 
 export const sendSms = async ( message: any ) => {
-  
+
   try{
     //const api_key = process.env.API_TECH_KEY;
     const api_key = process.env.API_AVLY_TEXT_KEY;
@@ -26,7 +25,7 @@ export const sendSms = async ( message: any ) => {
     if (data.message && data.message.includes('Insufficient balance')) {
       return false;
     }
-    
+
     return true;
   } catch (error) {
     console.error('Action Send Sms ::: Erreur lors de l\'envoi du SMS : ', error);

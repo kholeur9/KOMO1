@@ -16,11 +16,12 @@ import * as z from "zod";
 import { convertCreditSchema } from "@/secure/credit";
 
 export const ConvertCredit = async ( formData : z.infer<typeof convertCreditSchema> ) => {
-  
+  console.log('formData Getting in Action : ', formData);
   const validateFields = convertCreditSchema.safeParse(formData);
 
   //Vérifie les informations
   if (!validateFields.success) {
+    console.log('Erreur de validation : ', validateFields.error)
     return { error : "Votre échange a été Refusé"};
   }
 
@@ -33,19 +34,18 @@ export const ConvertCredit = async ( formData : z.infer<typeof convertCreditSche
 
   // Sauvegarder le retrait si tout est bon
   const totalCreditId = await userTotalCredit(ci);
+  console.log('totalCreditId : ', totalCreditId);
   
   if (!totalCreditId){
+    console.log('Erreur de crédit : ', totalCreditId)
     return {error : 'Erreur de récupération des credits.'}
   }
 
   const lastWithdraw = await getLastWithDraw(totalCreditId.id);
+  console.log('lastWithdraw : ', lastWithdraw);
 
-  if (lastWithdraw && lastWithdraw.allowWithdraw) {
-    if (lastWithdraw.allowWithdraw) {
-      return { error : 'Vous avez déjà éffectué un retrait dans les 24 heures.'}
-    }
-  } else {
-    return null;
+  if (lastWithdraw?.allowWithdraw) {
+    return { error : 'Vous avez déjà éffectué un retrait dans les 24 heures.'}
   }
 
   let transactionError = null;
@@ -82,7 +82,9 @@ export const ConvertCredit = async ( formData : z.infer<typeof convertCreditSche
 
       const message = `Le client ${numero} a effectue une conversion de ${withdraw} c redits pour un forfait de $iquantity} Mo. Mess age de l'application komo1App.`
       const send = await sendSms(message);
+      console.log('send SMS : ', send);
       if (!send) {
+        console.log('Erreur lors de l\'envoi du SMS : ', send);
         throw new Error('Transaction ::: Erreur lors de l\'envoi du SMS.');
       }
       
@@ -94,7 +96,8 @@ export const ConvertCredit = async ( formData : z.infer<typeof convertCreditSche
 
   if (transactionError) {
 
-    if (transactionError instanceof Error &&  transactionError.message.includes('Transaction ::: Erreur lors de l\'envoi du SMS.')) {
+    if (transactionError instanceof Error && transactionError.message.includes('Transaction ::: Erreur lors de l\'envoi du SMS.')) {
+      console.log('Problème interne')
       return { error : 'Problème interne, réessayer plus tard.'};
     }
 

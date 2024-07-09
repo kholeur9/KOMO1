@@ -6,15 +6,19 @@ import { redirect } from "next/navigation";
 import * as z from "zod";
 
 import { fileSchema } from "@/secure/file-schema";
-//import { sendData } from "@/lib/excel";
 
 import { userTable } from "@/db/schema";
 import { forfaits } from "@/db/schema";
 import { credits } from "@/db/schema";
+import { totalCredit } from "@/db/schema";
 import { db } from "@/db";
 
 import { getUser } from "@/data/user";
 import { getForfaitByUserId } from "@/data/user";
+//import { getCreditByForfaitId } from "@/data/user";
+import { userTotalCredit } from "@/data/user";
+
+import { eq } from "drizzle-orm";
 
 export const uploadFile = async (value: z.infer<typeof fileSchema>) => {
 
@@ -40,13 +44,23 @@ export const uploadFile = async (value: z.infer<typeof fileSchema>) => {
             userId: user.id,
             forfait: row[2],
           })
+          
           const forfaitId = await getForfaitByUserId(user.id);
+          
           if (fofaitInserted) {
-            await db.insert(credits).values({
+            const creditCreated = await db.insert(credits).values({
               userId: user.id,
               forfaitId: forfaitId.id,
               credit: calcul,
             })
+
+            const getUniqueTotalcredit = await userTotalCredit(user.id)
+            
+            if (creditCreated) {
+              await db.update(totalCredit).set({
+                total_credit: getUniqueTotalcredit.total_credit + calcul,
+              }).where(eq(totalCredit.id, getUniqueTotalcredit.id))
+            }
           }
 
           continue;
@@ -72,11 +86,18 @@ export const uploadFile = async (value: z.infer<typeof fileSchema>) => {
             // créer le crédit
             const forfaitCreatedWithId = await getForfaitByUserId(createdUserWithId.id)
             if (forfaitCreated) {
-              await db.insert(credits).values({
+              const creditCreated = await db.insert(credits).values({
                 userId: createdUserWithId.id,
                 forfaitId: forfaitCreatedWithId.id,
                 credit: calcul,
               })
+
+              if (creditCreated) {
+                await db.insert(totalCredit).values({
+                  userId: createdUserWithId.id,
+                  total_credit: calcul,
+                })
+              }
             }
           }
           continue;

@@ -44,6 +44,17 @@ export const getForfaitByUserId = async (id : any ) => {
   }
 }
 
+export const getCreditByForfaitId = async ( id : any ) => {
+  try {
+    const creditForfaitId = await db.query.credits.findMany({
+      where: eq(credits.forfaitId, id),
+    })
+    return creditForfaitId[0];
+  } catch (error) {
+    throw new Error('Failed to fetch Credit.');
+  }
+}
+
 export const countAllUsers = async (id: any) => {
   try {
     const countUser = await db.select({value: count()}).from(userTable).where(ne(userTable.id, id))
@@ -118,8 +129,8 @@ export const countedForfaitByDate = async () => {
 
 export const countAllCredits = async () => {
   try {
-    const countCredit = await db.select({ value : sum(credits.credit) }).from(credits)
-    const counted = countCredit.map(credit => credit.value === null ? 0 : credit.value)
+    const countCredit = await db.select({ value : sum(totalCredit.total_credit) }).from(totalCredit)
+    const counted = countCredit.map(total_credit => total_credit.value === null ? 0 : total_credit.value)
     return counted;
   } catch (error) {
     throw new Error('Failed to fetch All credit.');
@@ -183,7 +194,7 @@ export const getUniqueTotalCredit = async ( user : any ) => {
   }
 }
 
-export const userTotalCredit = async ( id : any ) => {
+export const userTotalCredit = async ( id : number ) => {
   try {
     const getTotalCredit = await db.query.totalCredit.findMany({
       where: eq(totalCredit.userId, id)
@@ -194,7 +205,7 @@ export const userTotalCredit = async ( id : any ) => {
   }
 }
 
-export const getLastWithDraw = async ( id : any ) => {
+export const getLastWithDraw = async ( id : number ) => {
   try {
     const lastWithdraw = await db.select({
       id: retraitCredit.id,
@@ -211,7 +222,7 @@ export const getLastWithDraw = async ( id : any ) => {
       .orderBy(desc(retraitCredit.date))
       .limit(1);
 
-    if (lastWithdraw.length <= 0){
+    if (!lastWithdraw){
       return null;
     }
 

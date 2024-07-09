@@ -14,7 +14,7 @@ export const MenuClient = async () => {
         className="hover:border-orange-500"
         href={`/retrait/${user?.id}`}
         description={'Cliquer et convertisser vos crédits en forfaits.'}
-        header={'Crédit'}
+        header={'Retrait de crédits'}
         >
         <i className="fi fi-rr-bonus-star text-orange-500"></i>
       </Menu>
