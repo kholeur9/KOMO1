@@ -4,7 +4,7 @@ import "./globals.css";
 
 import clsx from "clsx";
 
-import { Toaster } from 'sonner';import { Toaster } from 'sonner';
+import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ["latin"] });
 
