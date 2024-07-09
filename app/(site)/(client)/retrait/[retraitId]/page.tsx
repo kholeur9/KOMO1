@@ -19,7 +19,9 @@ export default async function RetraitPage({ params } : RetraitPageProps ) {
 
   //const lastQuantity = await getLastWithDraw(all_credit?.id);
 
-  if (user?.role !== 'admin' || !user) {
+  if (user?.role === 'admin') {
+    redirect('/admin');
+  } else if (!user) {
     redirect('/login/client')
   }
   

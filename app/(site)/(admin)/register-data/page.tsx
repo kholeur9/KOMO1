@@ -9,8 +9,10 @@ import { redirect } from "next/navigation";
 export default async function RegisterDataPage() {
   const { user } = await validateRequest();
 
-  if (user?.role !== 'admin' || !user) {
-    redirect('/login/admin');
+  if (user?.role === 'client') {
+    redirect('/admin');
+  } else if (!user) {
+    redirect('/login/admin')
   }
   
   return (

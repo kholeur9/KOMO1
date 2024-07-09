@@ -11,7 +11,9 @@ export default async function MembrePage({
   params } : MembrePageProps ) {
   const { user } = await validateRequest();
 
-  if (user?.role !== 'admin' || !user) {
+  if (user?.role === 'admin') {
+    redirect('/admin');
+  } else if (!user) {
     redirect('/login/client')
   }
   

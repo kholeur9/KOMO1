@@ -13,9 +13,13 @@ export default async function HistoriquePage({
 } : HistoriquePageProps) {
 
   const { user } = await validateRequest();
-  if (user?.role !== 'admin' || !user) {
+  
+  if (user?.role === 'admin') {
+    redirect('/admin');
+  } else if (!user) {
     redirect('/login/client')
   }
+  
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <h1 className="text-3xl font-bold text-white">Historique: Client ID : {params.historiqueId}</h1>

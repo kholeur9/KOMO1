@@ -7,8 +7,10 @@ import { validateRequest } from "@/data/current-user";
 export default async function AdminPage() {
   const { user } = await validateRequest();
 
-  if (user?.role !== 'admin') {
+  if (user?.role === 'client') {
     redirect('/');
+  } else if (!user) {
+    redirect('/login/admin')
   }
   
   return (
