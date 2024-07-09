@@ -9,22 +9,8 @@ export default function LoginPage({ params } : LoginPageProps ) {
   const admin = params.slug === "admin";
   const client = params.slug === "client";
   return (
-    <div className="flex flex-col h-full px-6">
-      <div className="w-full flex flex-col items-center justify-center py-1.5 gap-2.5  absolute bottom-[-10px] right-0 left-0">
-        <div className="w-full flex items-center justify-center gap-6">
-          <div className="flex items-center gap-1">
-            <div className="w-[30px] h-[30px] rounded-full overflow-hidden">
-              <Image src="/logo.jpeg" alt="KOMO1" width={100} height={100} className="w-full" />
-            </div>
-            <p className="text-sm text-gray-400">Komo1</p>
-          </div>
-          <div className="flex items-center gap-1">
-            <div className="w-[30px] h-30px] rounded-full overflow-hidden">
-              <Image src="/prima.jpeg" alt="PRIMA" width={100} height={100} className="w-full" />
-            </div>
-            <p className="text-sm text-gray-400">Prima-Tech</p>
-          </div>
-        </div>
+    <div className="flex flex-col px-6">
+      <div className="w-full flex flex-col items-center justify-center py-2.5 gap-2.5  absolute bottom-0 right-0 left-0">
         <div className="w-full flex items-center justify-center gap-2.5">
           <p className="text-white text-[9px] text-center">
             <a href="#">
@@ -38,7 +24,7 @@ export default function LoginPage({ params } : LoginPageProps ) {
           </p>
         </div>
       </div>
-      <div className="flex flex-col py-2.5 h-screen">
+      <div className="flex flex-col space-y-8">
         <div className="flex flex-col">
           <div className="w-[50px] h-50px] rounded-full overflow-hidden">
             <Image src="/logo.jpeg" alt="KOMO1" width={100} height={100} className="w-full" />
@@ -52,9 +38,7 @@ export default function LoginPage({ params } : LoginPageProps ) {
             { params.slug === 'client' && "Echanger vos crédits en forfait internet."}
           </p>
         </div>
-        <div className="flex flex-col h-full">
-          <Login admin={params.slug} />
-        </div>
+        <Login admin={params.slug} />
       </div>
     </div>
   )
