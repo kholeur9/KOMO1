@@ -6,15 +6,18 @@ import { retraitCredit } from "@/db/schema";
 import { forfaits } from "@/db/schema";
 import { credits } from "@/db/schema";
 
-import { eq, sum, desc, count, ne } from "drizzle-orm";
+import { eq, sum, desc, asc, count, ne } from "drizzle-orm";
 
 import { DateTime } from "luxon";
 
 export const getUser = async (username: string) => {
   try {
-    const user = await db.select().from(userTable).where(
+    /**const user = await db.select().from(userTable).where(
         eq(userTable.username, username),
-    );
+    );*/
+    const user = await db.query.userTable.findMany({
+      where: eq(userTable.username, username)
+    })
     return user[0];
   } catch (error) {
     console.error('Failed to fetch user:', error);
@@ -33,11 +36,13 @@ export const getUserById = async (id : number ) => {
   }
 }
 
-export const getForfaitByUserId = async (id : any ) => {
+export const getForfaitByUserId = async (id : number ) => {
   try {
     const forfaitUserId = await db.query.forfaits.findMany({
       where: eq(forfaits.userId, id),
+      orderBy: [desc(forfaits.date)],
     })
+
     return forfaitUserId[0];
   } catch (error) {
     throw new Error('Failed to fetch user.');
@@ -183,10 +188,8 @@ export const countedRetraitByDate = async () => {
 
 export const getUniqueTotalCredit = async ( user : any ) => {
   try {
-    const getCredit = await db.query.totalCredit.findMany({
-      where: eq(totalCredit.userId, user?.id)
-    })
-    console.log(`Found unique `, getCredit)
+    const getCredit = await db.select().from(totalCredit).where(eq(totalCredit.userId, user.id))
+    
     return getCredit[0];
   } catch (error) {
     console.error('Failed to fetch user:', error);
@@ -194,7 +197,7 @@ export const getUniqueTotalCredit = async ( user : any ) => {
   }
 }
 
-export const userTotalCredit = async ( id : number ) => {
+export const userTotalCredit = async ( id : any ) => {
   try {
     const getTotalCredit = await db.query.totalCredit.findMany({
       where: eq(totalCredit.userId, id)
@@ -249,14 +252,12 @@ export const getLastWithDraw = async ( id : number ) => {
           quantity: item.quantity,
         };
       } catch (error) {
-        console.error('Erreur de formatage de date', error)
         throw new Error('Erreur de formatage de date');
       }
     })
     
     return result[0]
   } catch (error) {
-    console.log(`Erreur lors de la récupération du dernier retrait : `, error);
     throw new Error('Erreur lors de la récupération du dernier retrait.');
   }
 };

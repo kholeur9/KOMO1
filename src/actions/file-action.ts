@@ -29,89 +29,119 @@ export const uploadFile = async (value: z.infer<typeof fileSchema>) => {
     }
   }
 
+  const { file } = validateFile.data;
+
   try {
-    const { file } = validateFile.data;
-
-    console.log('file : ', file[0])
     for (let row of file) {
-      const user = await getUser(row[0])
-      const conversion = parseInt(row[2], 10)
-      const calcul = Math.floor(conversion * 0.07)
+      
+      let user = await getUser(row[0])
 
-      if (user) {
-        try {
-          const fofaitInserted = await db.insert(forfaits).values({
-            userId: user.id,
-            forfait: row[2],
-          })
-          
-          const forfaitId = await getForfaitByUserId(user.id);
-          
-          if (fofaitInserted) {
-            const creditCreated = await db.insert(credits).values({
-              userId: user.id,
-              forfaitId: forfaitId.id,
-              credit: calcul,
-            })
+      if (!user) {
+        const createdThisUser = await createUser(row[0])
+        user = await getUser(row[0])
 
-            const getUniqueTotalcredit = await userTotalCredit(user.id)
-            
-            if (creditCreated) {
-              await db.update(totalCredit).set({
-                total_credit: getUniqueTotalcredit.total_credit + calcul,
-              }).where(eq(totalCredit.id, getUniqueTotalcredit.id))
-            }
-          }
-
-          continue;
-        } catch (error) {
-          console.log('Erreur lors de l\'insertion des forfaits', error)
-          throw new Error('Erreur lors de l\'insertion des données')
-        }
-      } else {
-        // créer l'utilisateur
-        try {
-          const createdUser = await db.insert(userTable).values({
-            username: row[0],
-          })
-
-          // créer le forfait
-          const createdUserWithId = await getUser(row[0])
-          if (createdUser) {
-            const forfaitCreated = await db.insert(forfaits).values({
-              userId: createdUserWithId.id,
-              forfait: row[2],
-            })
-
-            // créer le crédit
-            const forfaitCreatedWithId = await getForfaitByUserId(createdUserWithId.id)
-            if (forfaitCreated) {
-              const creditCreated = await db.insert(credits).values({
-                userId: createdUserWithId.id,
-                forfaitId: forfaitCreatedWithId.id,
-                credit: calcul,
-              })
-
-              if (creditCreated) {
-                await db.insert(totalCredit).values({
-                  userId: createdUserWithId.id,
-                  total_credit: calcul,
-                })
-              }
-            }
-          }
-          continue;
-        } catch (error) {
-          console.log('Erreur lors de la création de l\'utilisateur', error)
-          throw new Error('Erreur lors de la création de l\'utilisateur')
+        const initializeTotalCredit = await db.insert(totalCredit).values({
+          userId: createdThisUser.id,
+          total_credit: 0,
+        })
+        if (!initializeTotalCredit) {
+          console.log('Failed to create total credit')
         }
       }
-    }
 
+      //console.log('user : ', user)
+
+      await db.transaction(async (tx) => {
+
+        // Créer le forfait pour cet utilisateur
+        const insertedForfaitThisUser = await tx.insert(forfaits).values({
+          userId: user.id,
+          forfait: row[2]
+        }).returning({
+          id: forfaits.id,
+          userId: forfaits.userId,
+          forfait: forfaits.forfait,
+        })
+        /** console.log('insertedForfaitThisUser : ', { 
+          id: insertedForfaitThisUser[0].id,
+          userId: insertedForfaitThisUser[0].userId,
+          forfait: insertedForfaitThisUser[0].forfait
+        })*/
+        if (!insertedForfaitThisUser) {
+          console.log('Erreur lors de la création du forfait')
+        }
+
+        // Créer le crédit pour ce forfait : thisForfait * 0.07
+        const thisForfaitId = insertedForfaitThisUser[0].id;
+        const thisForfaitUserId = insertedForfaitThisUser[0].userId;
+        const thisForfait = insertedForfaitThisUser[0].forfait;
+        const calcul = Math.floor(thisForfait * 0.07)
+
+        const insertedCreditThisForfait = await tx.insert(credits).values({
+          userId: thisForfaitUserId,
+          forfaitId: thisForfaitId,
+          credit: calcul,
+        }).returning({
+          userId: credits.userId,
+          forfaitId: credits.forfaitId,
+          credit: credits.credit,
+        })
+        /**console.log('insertedCreditThisForfait : ', {
+          userId: insertedCreditThisForfait[0].userId,
+          forfaitId: insertedCreditThisForfait[0].forfaitId,
+          credit: insertedCreditThisForfait[0].credit,
+        })*/
+
+        if (!insertedCreditThisForfait) {
+          console.log('Erreur lors de la création du crédit')
+        }
+
+        // Mettre à jour le totalCredit de l'utilisateur
+        const thisCreditUserId = insertedCreditThisForfait[0].userId;
+        const thisCreditCredit = insertedCreditThisForfait[0].credit;
+        
+        const totalCreditThisUser = await userTotalCredit(thisCreditUserId)
+
+        if (!totalCreditThisUser) {
+          console.log('Erreur lors de la mise à jour.')
+        }
+
+        const updatedUserTotalCredit = await tx.update(totalCredit).set({
+          total_credit: totalCreditThisUser.total_credit + thisCreditCredit
+        }).where(eq(totalCredit.id, totalCreditThisUser.id)).returning({
+          userId: totalCredit.userId,
+          total_credit: totalCredit.total_credit,
+        }) 
+        /*console.log('totalCreditThisUser : ', {
+          userId: updatedUserTotalCredit[0].userId,
+          totalCredit: updatedUserTotalCredit[0].total_credit,
+        })*/
+
+        if (!updatedUserTotalCredit) {
+          console.log('Erreur lors de la mise à jour du total credit.')
+        }
+      });
+    }
   } catch (error) {
+    console.log('Erreur lors de la transaction', error)
     throw new Error('Erreur lors du chargement du fichier Excel')
   }
-
+  
   revalidatePath('/register-data')
   redirect('/admin')
+}
+
+async function createUser(username: string) {
+  try {
+    const result = await db.insert(userTable).values({
+      username: username,
+    }).returning({
+      id: userTable.id,
+      username: userTable.username,
+    })
+    return result[0]
+  } catch (error) {
+    console.log('Erreur lors de la création du compte', error)
+    throw new Error('Erreur lors de la création du compte')
+  }
 }

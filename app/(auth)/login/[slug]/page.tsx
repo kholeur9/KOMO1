@@ -9,7 +9,7 @@ export default function LoginPage({ params } : LoginPageProps ) {
   const admin = params.slug === "admin";
   const client = params.slug === "client";
   return (
-    <div className="flex flex-col px-6">
+    <div className="h-full flex flex-col py-2.5 px-6">
       <div className="w-full flex flex-col items-center justify-center py-2.5 gap-2.5  absolute bottom-0 right-0 left-0">
         <div className="w-full flex items-center justify-center gap-2.5">
           <p className="text-white text-[9px] text-center">
@@ -24,8 +24,8 @@ export default function LoginPage({ params } : LoginPageProps ) {
           </p>
         </div>
       </div>
-      <div className="flex flex-col space-y-8">
-        <div className="flex flex-col">
+      <div className="h-full flex flex-col space-y-8">
+        <div className="flex flex-col py-1.5">
           <div className="w-[50px] h-50px] rounded-full overflow-hidden">
             <Image src="/logo.jpeg" alt="KOMO1" width={100} height={100} className="w-full" />
           </div>
